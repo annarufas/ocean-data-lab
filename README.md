@@ -1,4 +1,4 @@
-# MATLAB tools to work with oceanographic datasets
+# MATLAB Tools to Work with Oceanographic Datasets
 
 This repository contains a collection of MATLAB scripts that I have developed for reading, formatting and visualising freely-available oceanographic datasets stored in `.nc` files. It includes tools to structure data in `lat x lon x depth x time` formats, essential for further processing, such as data validation, use in model inputs or statistical analysis. Developed across various projects, these scripts are actively maintained, with new additions based on evolving research needs.
 
