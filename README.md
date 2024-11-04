@@ -83,7 +83,7 @@ The specific oceanographic datasets accessed and processed by this repository in
     - CMIP6 [GFDL-COBALT historical simulation](https://aims2.llnl.gov/search/cmip6/)
     - CMIP6 [UKESM-MEDUSA historical simulation](https://aims2.llnl.gov/search/cmip6/)
 
-## MATLAB scripts overview
+## MATLAB Scripts Overview
 
 The following scripts are available in the `./code/` folder:
 
