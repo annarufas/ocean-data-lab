@@ -1,0 +1,167 @@
+
+% ======================================================================= %
+%                                                                         %
+%        PAR0 climatology calculated from astronomic/trigonometric        %
+%         equations and input data of cloud cover and ice fraction        % 
+%                                                                         %
+% This script creates a global gridded climatology of photosynthetic      %
+% available radiation at the surface ocean (PAR0) using astronomic/       %
+% trigonometric equations, incorporating inputs of sea ice fraction (from % 
+% CMEMS) and cloud cover (from Pincus et al. (2008)). The output arrays   %
+% are monthly (360 x 180 x 12 pixels) and daily (360 x 180 x 365 pixels)  %
+% climatologies in units of W m-2.                                        %
+%                                                                         %
+%   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
+%   Anna.RufasBlanco@earth.ox.ac.uk                                       %
+%                                                                         %
+%   Version 1.0 - Completed 29 Oct 2024                                   %
+%                                                                         %
+% ======================================================================= %
+
+% Clear workspace, close figures, and add paths to plotting resources
+close all; clear all; clc
+addpath(genpath(fullfile('code')))
+addpath(genpath(fullfile('resources','external'))); 
+addpath(genpath(fullfile('resources','internal')));
+addpath(genpath(fullfile('figures')))
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 1 - PRESETS
+% -------------------------------------------------------------------------
+
+% Output files
+fullpathOutputPar0dailyFile = fullfile('data','processed','par0_daily_calculated.mat');
+fullpathOutputPar0monthlyFile = fullfile('data','processed','par0_monthly_calculated.mat');
+
+% Cloud cover and ice fraction data
+fullpathCloudCoverClimatology = fullfile('data','processed','cloudcover_pincus.mat');
+fullpathIceFractionClimatology = fullfile('data','processed','icefrac_cmems_phys.mat');
+
+% Grid used to extract ocean locations to calculate PAR0 (I don't want to 
+% calculate PAR0 at each grid point in the lat/lon array, which includes 
+% land locations)
+fullpathGridFile = fullfile('data','raw','grid','grid_GEBCO_360_180.mat');
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 2 - LOAD AUXILLIARY DATA
+% -------------------------------------------------------------------------
+
+% Load cloud cover and ice fraction data
+load(fullpathCloudCoverClimatology,'cloudcover','cloudcover_lat','cloudcover_lon') % oktas
+load(fullpathIceFractionClimatology,'icefrac','icefrac_lat','icefrac_lon') % 0-1 fraction
+
+% Load the grid 
+load(fullpathGridFile,'Xbb','Ybb','x','y','ixBb','iyBb') 
+nOceanLocs = length(Ybb);
+oceanLons = Xbb;
+oceanLats = Ybb;
+nOceanLons = length(x);
+nOceanLats = length(y);
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 3 - INTERPOLATION FUNCTIONS
+% -------------------------------------------------------------------------
+
+% Grids for interpolation
+[Xclo, Yclo, Tclo] = ndgrid(cloudcover_lon, cloudcover_lat, (1:12)');
+[Xice, Yice, Tice] = ndgrid(icefrac_lat, icefrac_lon, (1:12)');
+
+% Interpolation functions
+Fclo = griddedInterpolant(Xclo, Yclo, Tclo, cloudcover, 'linear', 'none');
+Fice = griddedInterpolant(Xice, Yice, Tice, icefrac, 'linear', 'none');
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 4 - DAILY PAR0 CALCULATIONS
+% -------------------------------------------------------------------------
+
+Pdaily = NaN(nOceanLocs,365);
+
+for iLoc = 1:nOceanLocs
+
+    qLon = oceanLons(iLoc);   
+    qLat = oceanLats(iLoc);
+
+    avgPar0daylight = zeros(365,1); % W m-2
+    totPar0daylight = zeros(365,1); % J m-2
+    nDaylightHours  = zeros(365,1);
+
+    % Query points for interpolation to get cloud cover
+    [qX, qY, qT] = ndgrid(qLon, qLat, (1:365)');
+    qCloudFrac = Fclo(qX, qY, qT);
+    qCloudFrac(qCloudFrac<0) = 0; % oktas
+    qCloudFrac(isnan(qCloudFrac)) = 0; 
+
+    % Query points for interpolation to get ice fraction
+    [qX, qY, qT] = ndgrid(qLat, qLon, (1:365)'); % notice lat/lon reversed from cloud cover
+    qIceFrac = Fice(qX, qY, qT);
+    qIceFrac(qIceFrac<0) = min(qIceFrac(qIceFrac > 0)); % 0-1
+    qIceFrac(isnan(qIceFrac)) = 0;
+
+    % Calculate the average PAR0 received during the daylight period (nDaylightHours) of each day
+    [avgPar0daylight(:), nDaylightHours(:)] = calculatePAR0fromEquations(...
+        qLat, squeeze(qCloudFrac), squeeze(qIceFrac)); % W m-2
+
+    totPar0daylight(:) = avgPar0daylight(:).*nDaylightHours(:)*3600; % J m-2
+    Pdaily(iLoc,:) = totPar0daylight(:)./(24*3600); % J m-2 --> W m-2 (= J s-1 m-2)
+end    
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 5 - MONTHLY CLIMATOLOGY CALCULATIONS
+% -------------------------------------------------------------------------
+
+Pclim = NaN(nOceanLocs,12);
+daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; % days in each month, aligning with a non-leap year
+idxDay = 1; 
+for iMonth = 1:12
+    currentMonthData = Pdaily(:,idxDay:idxDay+daysInMonth(iMonth)-1);
+    Pclim(:,iMonth) = mean(currentMonthData, 2, 'omitnan');
+    idxDay = idxDay + daysInMonth(iMonth); % move to the starting day of the next month
+end
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 6 - REPOSITION DATA ON A LON/LAT ARRAY
+% -------------------------------------------------------------------------
+
+geo_Pdaily = NaN(nOceanLons,nOceanLats,365);
+geo_Pclim  = NaN(nOceanLons,nOceanLats,12);
+
+for iLoc = 1:nOceanLocs
+    iLon = ixBb(iLoc);
+    iLat = iyBb(iLoc);
+    geo_Pdaily(iLon,iLat,:) = Pdaily(iLoc,:);
+    geo_Pclim(iLon,iLat,:)  = Pclim(iLoc,:);
+end 
+
+% =========================================================================
+%%
+% -------------------------------------------------------------------------
+% SECTION 7 - CHECKINGS AND SAVE
+% -------------------------------------------------------------------------
+
+% Check for spurious data points
+figure(); histogram(geo_Pclim(:),100);
+figure(); histogram(geo_Pdaily(:),100);
+
+% Save output
+par0_lat = y;
+par0_lon = x;
+par0daily = geo_Pdaily;
+par0clim = geo_Pclim;
+save(fullfile(fullpathOutputPar0dailyFile),'par0daily','par0_lat','par0_lon') 
+save(fullfile(fullpathOutputPar0monthlyFile),'par0clim','par0_lat','par0_lon') 
+
+% Visual inspection
+plotMonthlyMaps(fullpathOutputPar0monthlyFile,[],'W m^{-2}',...
+    0,200,true,[],'fig_monthly_par0_calculated','PAR0 calculated from equations')
