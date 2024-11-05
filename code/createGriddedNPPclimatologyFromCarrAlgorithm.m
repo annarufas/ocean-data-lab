@@ -6,9 +6,10 @@
 % This script creates a global gridded climatology of net primary         %
 % production (NPP) using the algorithm of Carr 2002                       %
 % (https://doi.org/10.1016/S0967-0645(01)00094-7) and input data of       %
-% chlorophyll a, sea surface temperature and photosynthetic active        %
-% radiation in the surface ocean (PAR0). The output array is a monthly    %
-% climatology of 360 x 180 x 12 pixels and has units of mg C m-2 d-1.     %                                        
+% chlorophyll a (chla), sea surface temperature (SST) and photosynthetic  %
+% active radiation in the surface ocean (PAR0). The output array is a     %
+% monthly climatology of 360 x 180 x 12 pixels and has units of           %
+% mg C m-2 d-1.                                                           %                                        
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
@@ -34,7 +35,7 @@ addpath(genpath(fullfile('figures')))
 fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_seawifs_pathfinder.mat');
 
 % Input data files
-fullpathChla = fullfile('data','processed','chla_seawifs.mat'); % mg m-3
+fullpathChla = fullfile('data','processed','chla_seawifs.mat'); % mg chla m-3
 fullpathPar0 = fullfile('data','processed','par0_seawifs.mat'); % W m-2
 fullpathSst  = fullfile('data','processed','sst_pathfinder_v5.mat'); % ºC
 
@@ -42,9 +43,9 @@ fullpathSst  = fullfile('data','processed','sst_pathfinder_v5.mat'); % ºC
 qLats = (-89.5:1:89.5)';
 qLons = (-179.5:1:179.5)';
 
-% choice of euphotic layer depth for the implementatio of Carr 2002
-% algorithm
-isZeuCarr = 0; % 1=Carr 2002, 0=Behrenfeld & Falkowski 1997 (as in Henson et al. 2012)
+% Choice of euphotic layer depth for the implementation of Carr 2002
+% algorithm, where 1=Carr 2002, 0=Behrenfeld & Falkowski 1997 (as in Henson et al. 2012)
+isZeuCarr = 0; 
 
 % =========================================================================
 %%
@@ -77,7 +78,6 @@ Fsst  = griddedInterpolant(Xs, Ys, Ts, sst, 'linear');
 qChla = Fchla(qX, qY, qT);
 qPar0 = Fpar0(qX, qY, qT);
 qSst = Fsst(qY, qX, qT);
-
 % figure(); pcolor(flipud(rot90(qSst(:,:,1)))); caxis([-2 25]); shading interp;
 
 % =========================================================================
