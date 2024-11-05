@@ -1,12 +1,13 @@
 
 % ======================================================================= %
 %                                                                         %
-%                 Nitrate, phosphate, silicate, T and O2                  %
-%                        climatologies from WOA                           %
+%         Nitrate, phosphate, silicate, oxygen and temperature            %
+%                       climatologies from WOA                            %
 %                                                                         %
 % This script reads in World Ocean Atlas 2023 (WOA23) monthly and annual  %
-% climatologies of BGC and PHYS variables and merges the two at depth to  %
-% create a comprehensive monthly climatology.                             %
+% climatologies of BGC (nitrate, phosphate, silicate and oxygen) and PHYS % 
+% (temperature) variables and merges the two at depth to create a         %
+% comprehensive monthly climatology.                                      %
 %                                                                         %
 % Dataset characteristics:                                                %
 %   - https://www.ncei.noaa.gov/access/world-ocean-atlas-2023/            %
@@ -16,13 +17,13 @@
 %   - Units: Nitrate: mmol m-3 (=umol kg-1)                               % 
 %            Phosphate: mmol m-3                                          %
 %            Silicate: mmol m-3                                           % 
-%            Temperature: °C                                              %
 %            Oxygen: mL L-1 (=umol kg-1)                                  %
+%            Temperature: °C                                              %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
 %                                                                         %
-%   Version 1.0 - Completed 29 Oct 2024                                   %
+%   Version 1.0 - Completed 5 Nov 2024                                    %
 %                                                                         %
 % ======================================================================= %
 
@@ -116,6 +117,9 @@ annualOxy = double(ncread(fullfile(fullpathInputWoaDir, [filenameInputCommonTag 
 annualSil = double(ncread(fullfile(fullpathInputWoaDir, [filenameInputCommonTag 'all_i00_01.nc']),'i_an'));
 annualPhos = double(ncread(fullfile(fullpathInputWoaDir, [filenameInputCommonTag 'all_p00_01.nc']),'p_an'));
 
+% Read standard deviation for annual temperature
+annualTempStd = double(ncread(fullfile(fullpathInputWoaDir, [filenameInputCommonTag 'decav_t00_01.nc']),'t_sd'));
+
 % % Visual inspection
 % iTempAnnual100m = find(zTempA == 100);
 % iNitAnnual100m = find(zNitA == 100);
@@ -126,7 +130,7 @@ annualPhos = double(ncread(fullfile(fullpathInputWoaDir, [filenameInputCommonTag
 % pcolor(flipud(rot90(annualTemp(:,:,iTempAnnual100m)))); 
 % caxis([-2 25]); 
 % cb = colorbar('FontSize', 15, 'FontWeight', 'bold'); 
-% cb.Label.String = 'Temperature (ºC)';
+% cb.Label.String = 'Temperature (°C)';
 % shading interp
 % colormap(jet)
 % box on
@@ -253,6 +257,15 @@ save(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyTemp),...
 save(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyOxy),...
     'oxy','woa_lon','woa_lat','woa_depth_oxy')
 
+% Save annual temperature
+woa_annual_lat = latA;
+woa_annual_lon = lonA;
+woa_annual_depth_temp = zTempA;
+temp_annual = annualTemp;
+temp_annual_std = annualTempStd;
+save(fullfile(fullpathOutputWoaDir,filenameOutputWoaAnnualTemp),...
+    'temp_annual','temp_annual_std','woa_annual_depth_temp','woa_annual_lon','woa_annual_lat')
+
 % Visual inspection
 plotMonthlyMaps(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyNit),11,'mmol m^{-3}',...
     0,25,true,[],'fig_monthly_nit_woa','Nitrate at 50 m, WOA')
@@ -260,15 +273,7 @@ plotMonthlyMaps(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyPhos),11,'
     0,2.5,true,[],'fig_monthly_phos_woa','Phosphate at 50 m, WOA')
 plotMonthlyMaps(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlySil),11,'mmol m^{-3}',...
     0,50,true,[],'fig_monthly_sil_woa','Silicate at 50 m, WOA')
-plotMonthlyMaps(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyTemp),11,'ºC',...
+plotMonthlyMaps(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyTemp),11,'°C',...
     0,25,true,[],'fig_monthly_temp_woa','Temperature at 50 m, WOA')
 plotMonthlyMaps(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyOxy),11,'mL L^{-1}',...
     160,360,true,[],'fig_monthly_oxy_woa','Oxygen at 50 m, WOA')
-
-% Save annual temperature
-woa_annual_lat = latA;
-woa_annual_lon = lonA;
-woa_annual_depth_temp = zTempA;
-temp_annual = annualTemp;
-save(fullfile(fullpathOutputWoaDir,filenameOutputWoaAnnualTemp),...
-    'temp_annual','woa_annual_depth_temp','woa_annual_lon','woa_annual_lat')
