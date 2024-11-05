@@ -21,7 +21,7 @@
 % instructions: https://forum.earthdata.nasa.gov/viewtopic.php?t=4784.    %
 %                                                                         %
 % This script uses this external function:                                %
-%       processNasaSensorData.m - custom function                         %
+%       processNASAsensorData.m - custom function                         %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
@@ -58,7 +58,7 @@ S = ncinfo(fullfile(fullpathInputPar0AquaModisDir,...
     ['AQUA_MODIS.' '20020901_20220930.L3m.MC.PAR.par.4km' '.nc']));
 
 % Process data
-[par0_sort,lat_sort,lon] = processNasaSensorData(fullpathInputPar0AquaModisDir,...
+[par0_sort,lat_sort,lon] = processNASAsensorData(fullpathInputPar0AquaModisDir,...
     'AQUA_MODIS.','par','20020901_20220930.L3m.MC.PAR.par.4km');
 
 % Units conversion: mol photons m-2 d-1 -> umol photons m-2 s-1 -> W m-2
@@ -87,7 +87,7 @@ S = ncinfo(fullfile(fullpathInputPar0SeawifsDir,...
     ['SEASTAR_SEAWIFS_GAC.' '19980301_20100331.L3m.MC.PAR.par.9km' '.nc']));
 
 % Process data
-[par0_sort,lat_sort,lon] = processNasaSensorData(fullpathInputPar0AquaModisDir,...
+[par0_sort,lat_sort,lon] = processNASAsensorData(fullpathInputPar0AquaModisDir,...
     'SEASTAR_SEAWIFS_GAC.','par','19980301_20100331.L3m.MC.PAR.par.9km');
 
 % Units conversion: mol photons m-2 d-1 -> umol photons m-2 s-1 -> W m-2

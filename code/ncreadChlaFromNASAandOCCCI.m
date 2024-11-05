@@ -31,7 +31,7 @@
 %   - Units: mg m-3                                                       %
 %                                                                         %
 % This script uses this external function:                                %
-%       processNasaSensorData.m - custom function                         %
+%       processNASAsensorData.m - custom function                         %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
@@ -74,7 +74,7 @@ S = ncinfo(fullfile(fullpathInputChlaAquaModisDir,...
     ['AQUA_MODIS.' '20020701_20230731.L3m.MC.CHL.chlor_a.4km' '.nc']));
 
 % Read in the data
-[chla_sort,lat_sort,lon] = processNasaSensorData(fullpathInputChlaAquaModisDir,...
+[chla_sort,lat_sort,lon] = processNASAsensorData(fullpathInputChlaAquaModisDir,...
     'AQUA_MODIS.','chlor_a','20020701_20230731.L3m.MC.CHL.chlor_a.4km');
 
 % Check for spurious data points
@@ -101,7 +101,7 @@ S = ncinfo(fullfile(fullpathInputChlaSeawifsDir,...
     ['SEASTAR_SEAWIFS_GAC.' '19970901_20100930.L3m.MC.CHL.chlor_a.9km' '.nc']));
 
 % Read in the data
-[chla_sort,lat_sort,lon] = processNasaSensorData(fullpathInputChlaSeawifsDir,...
+[chla_sort,lat_sort,lon] = processNASAsensorData(fullpathInputChlaSeawifsDir,...
     'SEASTAR_SEAWIFS_GAC.','chlor_a','19970901_20100930.L3m.MC.CHL.chlor_a.9km');
 
 % Check for spurious data points
