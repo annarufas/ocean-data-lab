@@ -362,8 +362,8 @@ function saveAndVisualiseOutput(iDataset,Dclim,Dclim_err,lat,lon,depth,...
             'npp_avg','npp_err','npp_lat','npp_lon','-v7.3')
 
         % Visual inspection
-        plotMonthlyMaps(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'mg C m-2 d-1',...
-            0,1000,true,[],'fig_monthly_npp_cmems','NPP CMEMS')
+        prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'mg C m-2 d-1',...
+            0,1000,true,'fig_monthly_npp_cmems','NPP CMEMS')
 
     elseif iDataset == 2
 
@@ -374,8 +374,8 @@ function saveAndVisualiseOutput(iDataset,Dclim,Dclim_err,lat,lon,depth,...
             'chla','chla_lat','chla_lon','-v7.3')  
 
         % Visual inspection
-        plotMonthlyMaps(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'mg m^{-3}',...
-            0,1,true,[],'fig_monthly_chla_cmems','Chla CMEMS')
+        prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'mg m^{-3}',...
+            0,1,true,'fig_monthly_chla_cmems','Chla CMEMS')
 
     elseif iDataset == 3
 
@@ -386,8 +386,8 @@ function saveAndVisualiseOutput(iDataset,Dclim,Dclim_err,lat,lon,depth,...
             'kd','kd_lat','kd_lon','-v7.3')   
 
         % Visual inspection
-        plotMonthlyMaps(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'m^{-1}',...
-            0,0.1,true,[],'fig_monthly_kd_cmems','kd CMEMS')
+        prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'m^{-1}',...
+            0,0.1,true,'fig_monthly_kd_cmems','kd CMEMS')
 
     elseif iDataset == 4
 
@@ -398,8 +398,8 @@ function saveAndVisualiseOutput(iDataset,Dclim,Dclim_err,lat,lon,depth,...
             'mld','mld_lat','mld_lon','-v7.3')   
 
         % Visual inspection
-        plotMonthlyMaps(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'m',...
-            0,200,true,[],'fig_monthly_mld_cmems','MLD CMEMS')
+        prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'m',...
+            0,200,true,'fig_monthly_mld_cmems','MLD CMEMS')
 
     elseif iDataset == 5
 
@@ -410,8 +410,8 @@ function saveAndVisualiseOutput(iDataset,Dclim,Dclim_err,lat,lon,depth,...
             'icefrac','icefrac_lat','icefrac_lon','-v7.3')  
 
         % Visual inspection
-        plotMonthlyMaps(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'unitless',...
-            0,0.5,true,[],'fig_monthly_icefrac_cmems','Ice fraction CMEMS')
+        prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),[],'unitless',...
+            0,0.5,true,'fig_monthly_icefrac_cmems','Ice fraction CMEMS')
 
     elseif iDataset == 6
 
@@ -423,8 +423,8 @@ function saveAndVisualiseOutput(iDataset,Dclim,Dclim_err,lat,lon,depth,...
             'temp','temp_lat','temp_lon','temp_depth','-v7.3')  
 
         % Visual inspection
-        plotMonthlyMaps(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),18,'ºC',...
-            0,25,true,[],'fig_monthly_temp_cmems','Temperature at 50 m, CMEMS')
+        prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput{iDataset}),18,'ºC',...
+            0,25,true,'fig_monthly_temp_cmems','Temperature at 50 m, CMEMS')
 
     end
     

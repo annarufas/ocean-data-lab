@@ -63,6 +63,9 @@ lon(lon > 180) = lon(lon > 180) - 360;
 [lon_sort, sortIdx] = sort(lon);
 cloudoktas_sort = cloudoktas(sortIdx,:,:);
 
+% Swap lon and lat dimensions to get lat x lon x time
+cloudoktas_sort_perm = permute(cloudoktas_sort, [2, 1, 3]);
+
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
@@ -70,14 +73,14 @@ cloudoktas_sort = cloudoktas(sortIdx,:,:);
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-figure(); histogram(cloudoktas_sort(:),100);
+figure(); histogram(cloudoktas_sort_perm(:),100);
 
 % Save the data
-cloudcover = cloudoktas_sort;
+cloudcover = cloudoktas_sort_perm;
 cloudcover_lat = lat;
 cloudcover_lon = lon_sort;
 save(fullpathOutputCloudFile,'cloudcover','cloudcover_lat','cloudcover_lon')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputCloudFile,[],'oktas',...
-    4,8,true,[],'fig_monthly_cloudcover_pincus','Cloud cover Pincus 2008')
+prepareDataForPlotting(fullpathOutputCloudFile,[],'oktas',...
+    4,8,true,'fig_monthly_cloudcover_pincus','Cloud cover Pincus 2008')

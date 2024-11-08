@@ -58,24 +58,24 @@ S = ncinfo(fullfile(fullpathInputPar0AquaModisDir,...
     ['AQUA_MODIS.' '20020901_20220930.L3m.MC.PAR.par.4km' '.nc']));
 
 % Process data
-[par0_sort,lat_sort,lon] = processNASAsensorData(fullpathInputPar0AquaModisDir,...
+[par0,lat,lon] = processNASAsensorData(fullpathInputPar0AquaModisDir,...
     'AQUA_MODIS.','par','20020901_20220930.L3m.MC.PAR.par.4km');
 
 % Units conversion: mol photons m-2 d-1 -> umol photons m-2 s-1 -> W m-2
-par0_sort_Wm2 = par0_sort .* (1e6 ./ (3600 .* 24)) .* (3.90e-19 .* 6.02e23 ./ 1e6); 
+par0_Wm2 = par0 .* (1e6 ./ (3600 .* 24)) .* (3.90e-19 .* 6.02e23 ./ 1e6); 
 
 % Check for spurious data points
-figure(); histogram(par0_sort_Wm2(:), 100);
+figure(); histogram(par0_Wm2(:), 100);
 
 % Save the data
 par0_lon = lon;
-par0_lat = lat_sort;
-par0 = par0_sort_Wm2;
-save(fullpathOutputPar0AquaModisFile,'par0','par0_lon','par0_lat','-v7.3');
+par0_lat = lat;
+par0 = par0_Wm2;
+save(fullpathOutputPar0AquaModisFile,'par0','par0_lat','par0_lon','-v7.3');
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputPar0AquaModisFile,[],'W m^{-2}',...
-    0,200,true,[],'fig_monthly_par0_aquamodis','PAR0 Aqua-MODIS')
+prepareDataForPlotting(fullpathOutputPar0AquaModisFile,[],'W m^{-2}',...
+    0,200,true,'fig_monthly_par0_aquamodis','PAR0 Aqua-MODIS')
  
 % =========================================================================
 %%
@@ -87,22 +87,22 @@ S = ncinfo(fullfile(fullpathInputPar0SeawifsDir,...
     ['SEASTAR_SEAWIFS_GAC.' '19980301_20100331.L3m.MC.PAR.par.9km' '.nc']));
 
 % Process data
-[par0_sort,lat_sort,lon] = processNASAsensorData(fullpathInputPar0AquaModisDir,...
+[par0,lat,lon] = processNASAsensorData(fullpathInputPar0SeawifsDir,...
     'SEASTAR_SEAWIFS_GAC.','par','19980301_20100331.L3m.MC.PAR.par.9km');
 
 % Units conversion: mol photons m-2 d-1 -> umol photons m-2 s-1 -> W m-2
-par0_sort_Wm2 = par0_sort .* (1e6 ./ (3600 .* 24)) .* (3.90e-19 .* 6.02e23 ./ 1e6); 
+par0_Wm2 = par0 .* (1e6 ./ (3600 .* 24)) .* (3.90e-19 .* 6.02e23 ./ 1e6); 
 
 % Check for spurious data points
-figure(); histogram(par0_sort_Wm2(:), 100);
+figure(); histogram(par0_Wm2(:), 100);
 
 % Save the data
 par0_lon = lon;
-par0_lat = lat_sort;
-par0 = par0_sort_Wm2;
-save(fullpathOutputPar0SeawifsFile,'par0','par0_lon','par0_lat','-v7.3');
+par0_lat = lat;
+par0 = par0_Wm2;
+save(fullpathOutputPar0SeawifsFile,'par0','par0_lat','par0_lon','-v7.3');
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputPar0SeawifsFile,[],'W m^{-2}',...
-    0,200,true,[],'fig_monthly_par0_seawifs','PAR0 SeaWiFS')
+prepareDataForPlotting(fullpathOutputPar0SeawifsFile,[],'W m^{-2}',...
+    0,200,true,'fig_monthly_par0_seawifs','PAR0 SeaWiFS')
  

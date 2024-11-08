@@ -31,7 +31,7 @@
 %   - Units: mg m-3                                                       %
 %                                                                         %
 % This script uses this external function:                                %
-%       processNASAsensorData.m - custom function                         %
+%       processNASAsensorData - custom function                           %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
@@ -74,21 +74,20 @@ S = ncinfo(fullfile(fullpathInputChlaAquaModisDir,...
     ['AQUA_MODIS.' '20020701_20230731.L3m.MC.CHL.chlor_a.4km' '.nc']));
 
 % Read in the data
-[chla_sort,lat_sort,lon] = processNASAsensorData(fullpathInputChlaAquaModisDir,...
+[chla,lat,lon] = processNASAsensorData(fullpathInputChlaAquaModisDir,...
     'AQUA_MODIS.','chlor_a','20020701_20230731.L3m.MC.CHL.chlor_a.4km');
 
 % Check for spurious data points
-figure(); histogram(chla_sort(:), 100);
+figure(); histogram(chla(:), 100);
 
 % Save the data
-chla = chla_sort;
-chla_lat = lat_sort;
+chla_lat = lat;
 chla_lon = lon;
 save(fullpathOutputChlaAquaModisFile,'chla','chla_lat','chla_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputChlaAquaModisFile,[],'mg m^{-3}',...
-    0,1,true,[],'fig_monthly_chla_aquamodis','Chla Aqua-MODIS')
+prepareDataForPlotting(fullpathOutputChlaAquaModisFile,[],'mg m^{-3}',...
+    0,1,true,'fig_monthly_chla_aquamodis','Chla Aqua-MODIS')
 
 % =========================================================================
 %%
@@ -101,21 +100,20 @@ S = ncinfo(fullfile(fullpathInputChlaSeawifsDir,...
     ['SEASTAR_SEAWIFS_GAC.' '19970901_20100930.L3m.MC.CHL.chlor_a.9km' '.nc']));
 
 % Read in the data
-[chla_sort,lat_sort,lon] = processNASAsensorData(fullpathInputChlaSeawifsDir,...
+[chla,lat,lon] = processNASAsensorData(fullpathInputChlaSeawifsDir,...
     'SEASTAR_SEAWIFS_GAC.','chlor_a','19970901_20100930.L3m.MC.CHL.chlor_a.9km');
 
 % Check for spurious data points
-figure(); histogram(chla_sort(:), 100);
+figure(); histogram(chla(:), 100);
 
 % Save the data
-chla = chla_sort;
-chla_lat = lat_sort;
+chla_lat = lat;
 chla_lon = lon;
 save(fullpathOutputChlaSeawifsFile,'chla','chla_lat','chla_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputChlaSeawifsFile,[],'mg m^{-3}',...
-    0,1,true,[],'fig_monthly_chla_seawifs','Chla SeaWiFS')
+prepareDataForPlotting(fullpathOutputChlaSeawifsFile,[],'mg m^{-3}',...
+    0,1,true,'fig_monthly_chla_seawifs','Chla SeaWiFS')
 
 % =========================================================================
 %%
@@ -185,15 +183,18 @@ chlorophylla(chlorophylla < 0) = 0; % we cannot have negative values
 [lat_sort, sortIdx] = sort(lat);
 chla_sort = chlorophylla(:,sortIdx,:);
 
+% Swap lon and lat dimensions to get lat x lon x depth
+chla_sort_perm = permute(chla_sort, [2, 1, 3]);
+
 % Check for spurious data points
-figure(); histogram(chla_sort(:),100);
+figure(); histogram(chla_sort_perm(:),100);
 
 % Save the data
-chla = chla_sort;
+chla = chla_sort_perm;
 chla_lat = lat_sort;
 chla_lon = lon;
 save(fullpathOutputChlaOccciFile,'chla','chla_lat','chla_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputChlaOccciFile,[],'mg m^{-3}',...
-    0,1,true,[],'fig_monthly_chla_occci','Chla OC-CCI')
+prepareDataForPlotting(fullpathOutputChlaOccciFile,[],'mg m^{-3}',...
+    0,1,true,'fig_monthly_chla_occci','Chla OC-CCI')

@@ -18,7 +18,7 @@ function [npp] = Carr2002algorithm(chla, sst, par0, isZeuCarr)
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD
 %   Anna.RufasBlanco@earth.ox.ac.uk
 %
-%   Version 1.0 - Completed 4 nov 2024 
+%   Version 1.0 - Completed 4 Nov 2024 
 %
 % =========================================================================
 %%

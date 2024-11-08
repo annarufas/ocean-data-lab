@@ -62,6 +62,9 @@ lonW = [(0:2:178),(-180:2:-2)]'; % combine positive and negative longitudes
 [lonW_sort, sortIdx] = sort(lonW);
 mld_sort = mixedlayerdepth(sortIdx,:,:);
 
+% Swap lon and lat dimensions to get lat x lon x time
+mld_sort_perm = permute(mld_sort, [2, 1, 3]);
+
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
@@ -69,14 +72,14 @@ mld_sort = mixedlayerdepth(sortIdx,:,:);
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-figure(); histogram(mld_sort(:),100);
+figure(); histogram(mld_sort_perm(:),100);
 
 % Save the data
-mld = mld_sort;
+mld = mld_sort_perm;
 mld_lat = lat;
 mld_lon = lonW_sort;
 save(fullpathOutputMldFile,'mld','mld_lat','mld_lon')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputMldFile,[],'m',...
-    0,200,true,[],'fig_monthly_mld_ifremer','MLD IFREMER')
+prepareDataForPlotting(fullpathOutputMldFile,[],'m',...
+    0,200,true,'fig_monthly_mld_ifremer','MLD IFREMER')

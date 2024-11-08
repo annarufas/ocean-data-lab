@@ -154,7 +154,7 @@ function ncreadNPPdata(inputDir, tagInputFilename, yearSequence, outputFilename,
     titlePart1 = upper(parts{2});  % 'vgpm' -> 'VGPM'
     titlePart2 = upper(parts{3});  % 'modis' -> 'MODIS'
     sgTitle = sprintf('%s %s %s', 'NPP', titlePart1, titlePart2);
-    plotMonthlyMaps(fullfile(outputDir,outputFilename),[],'mg C m-2 d-1',...
-        0,1000,true,[],strcat('fig_monthly_',strcat('npp_',parts{2},'_',parts{3})),sgTitle)
+    prepareDataForPlotting(fullfile(outputDir,outputFilename),[],'mg C m-2 d-1',...
+        0,1000,true,strcat('fig_monthly_',strcat('npp_',parts{2},'_',parts{3})),sgTitle)
 
 end % function ncreadNPPdata

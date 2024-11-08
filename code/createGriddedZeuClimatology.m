@@ -59,5 +59,5 @@ zeu_lon = kd_lon;
 save(fullfile(fullpathOutputZeuFile),'zeu','zeu_lat','zeu_lon')   
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputZeuFile,[],'m',...
-    0,200,true,[],'fig_monthly_zeu_calculated_onepercentpar0','Zeu calculated from kd')
+prepareDataForPlotting(fullpathOutputZeuFile,[],'m',...
+    0,200,true,'fig_monthly_zeu_calculated_onepercentpar0','Zeu calculated from kd')

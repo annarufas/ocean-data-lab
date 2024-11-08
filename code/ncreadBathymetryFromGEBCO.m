@@ -5,8 +5,8 @@
 %                                                                         %
 % This script processes bathymetric data from the General Bathymetric     %
 % Chart of the Ocean (GEBCO). I have chosen the file GEBCO_2024 Grid      %
-% (sub-ice topo/bathy). The high-resolution dataset (86400 x 43200) is    %
-% downsampled to a manageable 2160 x 1080 grid, reducing resolution x40   %
+% (sub-ice topo/bathy). The high-resolution dataset (43200 x 86400) is    %
+% downsampled to a manageable 1080 x 2160 grid, reducing resolution x40   %
 % for optimised computational efficiency in further analyses.             %
 %                                                                         %
 % Dataset characteristics:                                                %
@@ -21,8 +21,12 @@
 %                                                                         %
 % ======================================================================= %
 
-% Clear workspace, close figures
+% Clear workspace, close figures, and add paths to plotting resources
 close all; clear all; clc
+addpath(genpath(fullfile('code')));
+addpath(genpath(fullfile('resources','external'))); 
+addpath(genpath(fullfile('resources','internal'))); 
+addpath(genpath(fullfile('figures')))
 
 % =========================================================================
 %%
@@ -51,13 +55,16 @@ bathymetry = single(ncread(fullpathInputGebcoFile,'elevation'));
 % Some arrangements
 bathymetry(bathymetry > 0) = NaN; % land
 
-% Regrid to a lower resolution, from 86400 x 43200 to 2160 x 1080 (decrease
+% Swap lon and lat dimensions to get lat x lon
+bathymetry_perm = permute(bathymetry, [2, 1]);
+
+% Regrid to a lower resolution, from 43200 x 86400 to 1080 x 2160 (decrease
 % by a factor of 40)
-newLon = linspace(min(lon),max(lon),numel(lon)/40)';
 newLat = linspace(min(lat),max(lat),numel(lat)/40)';
-[X, Y] = ndgrid(lon, lat); % original array
-[qX, qY] = ndgrid(newLon,newLat); % query points for interpolation 
-F = griddedInterpolant(X, Y, bathymetry);
+newLon = linspace(min(lon),max(lon),numel(lon)/40)';
+[X, Y] = ndgrid(lat,lon); % original array
+[qX, qY] = ndgrid(newLat,newLon); % query points for interpolation 
+F = griddedInterpolant(X, Y, bathymetry_perm);
 qBathym = squeeze(F(qX, qY)); 
 
 % =========================================================================
@@ -68,7 +75,7 @@ qBathym = squeeze(F(qX, qY));
 
 % Visual inspection
 figure()
-pcolor(flipud(rot90(qBathym(:,:)))); 
+pcolor(qBathym); 
 caxis([-7000 0]);
 cb = colorbar('FontSize', 12); 
 cb.Label.String = 'Depth (m)';
@@ -80,4 +87,4 @@ box on
 bathym = qBathym;
 bathym_lon = newLon;
 bathym_lat = newLat;
-save(fullpathOutputGebcoFile,'bathym','bathym_lon','bathym_lat','-v7.3')
+save(fullpathOutputGebcoFile,'bathym','bathym_lat','bathym_lon','-v7.3')

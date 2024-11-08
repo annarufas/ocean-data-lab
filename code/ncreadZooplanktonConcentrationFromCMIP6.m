@@ -282,15 +282,15 @@ load(fullpathRawDataIntermediateFile,'pisces','cobalt','medusa')
 load(fullpathGridFile,'Xbb','x','y','ixBb','iyBb'); 
 
 nLocs = length(Xbb);
-nRegriddedLon = length(x);
 nRegriddedLat = length(y);
+nRegriddedLon = length(x);
 
 % .........................................................................
 
 % PISCES
 
 % Group depth zone data after regridding
-mesozooClimatologyRegularPisces = NaN(length(Xbb),numel(pisces.depth),12); % 4448 x 75 x 12
+mesozooClimatologyRegularPisces = NaN(nLocs,numel(pisces.depth),12); % 4448 x 75 x 12
 depthZoneSize = floor(numel(pisces.depth) / NUM_DEPTH_ZONES);
 for iZone = 1:NUM_DEPTH_ZONES
     load(fullfile(fullpathInputDataDir,sprintf('mesozooClimatologyRegularPisces_dz%d.mat',iZone)),...
@@ -306,18 +306,22 @@ for iZone = 1:NUM_DEPTH_ZONES
 end
 
 % Reposition data on a lon x lat array
-mesozoo = NaN(nRegriddedLon,nRegriddedLat,numel(pisces.depth),12);
+mesozoo_regrid = NaN(nRegriddedLon,nRegriddedLat,numel(pisces.depth),12);
 for iLoc = 1:nLocs
     iLon = ixBb(iLoc);
     iLat = iyBb(iLoc);
     for iMonth = 1:12
         for iDepth = 1:numel(pisces.depth)
-            mesozoo(iLon,iLat,iDepth,iMonth) = mesozooClimatologyRegularPisces(iLoc,iDepth,iMonth); % mg C m-3
+            mesozoo_regrid(iLon,iLat,iDepth,iMonth) = mesozooClimatologyRegularPisces(iLoc,iDepth,iMonth); % mg C m-3
         end
     end
 end
 
+% Swap lon and lat dimensions to get lat x lon x depth x time
+mesozoo_regrid_perm = permute(mesozoo_regrid, [2, 1, 3, 4]);
+
 % Save
+mesozoo = mesozoo_regrid_perm;
 mesozoo_lon = x;
 mesozoo_lat = y;
 mesozoo_depth = double(pisces.depth);
@@ -325,8 +329,8 @@ save(fullpathPiscesOutputFile,'mesozoo','mesozoo_lat','mesozoo_lon','mesozoo_dep
 clear mesozoo_lon mesozoo_lat mesozoo_depth mesozoo
 
 % Visual inspection
-plotMonthlyMaps(fullpathPiscesOutputFile,19,'mg C m^{-3}',...
-    0,20,true,[],'fig_monthly_mesozoo_pisces','Mesozooplankton at 50 m, PISCES')
+prepareDataForPlotting(fullpathPiscesOutputFile,19,'mg C m^{-3}',...
+    0,20,true,'fig_monthly_mesozoo_pisces','Mesozooplankton at 50 m, PISCES')
 
 % .........................................................................
 
@@ -335,17 +339,20 @@ plotMonthlyMaps(fullpathPiscesOutputFile,19,'mg C m^{-3}',...
 load(fullfile(fullpathInputDataDir,'mesozooClimatologyRegularCobalt.mat'),...
     'mesozooClimatologyRegularCobalt');
 
+% Swap lon and lat dimensions to get lat x lon x depth x time
+mesozoo_perm = permute(mesozooClimatologyRegularCobalt, [2, 1, 3, 4]);
+
 % Save
 mesozoo_lon = double(cobalt.lon);
 mesozoo_lat = double(cobalt.lat);
 mesozoo_depth = double(cobalt.depth);
-mesozoo = mesozooClimatologyRegularCobalt;
+mesozoo = mesozoo_perm;
 save(fullpathCobaltOutputFile,'mesozoo','mesozoo_lat','mesozoo_lon','mesozoo_depth');
 clear mesozoo_lon mesozoo_lat mesozoo_depth mesozoo
 
 % Visual inspection
-plotMonthlyMaps(fullpathCobaltOutputFile,5,'mg C m^{-3}',...
-    0,20,true,[],'fig_monthly_mesozoo_cobalt','Mesozooplankton at 50 m, COBALT')
+prepareDataForPlotting(fullpathCobaltOutputFile,5,'mg C m^{-3}',...
+    0,20,true,'fig_monthly_mesozoo_cobalt','Mesozooplankton at 50 m, COBALT')
 
 % .........................................................................
 
@@ -368,18 +375,22 @@ for iZone = 1:NUM_DEPTH_ZONES
 end
 
 % Reposition data on a lon x lat array
-mesozoo = NaN(nRegriddedLon,nRegriddedLat,numel(medusa.depth),12);
+mesozoo_regrid = NaN(nRegriddedLon,nRegriddedLat,numel(medusa.depth),12);
 for iLoc = 1:nLocs
     iLon = ixBb(iLoc);
     iLat = iyBb(iLoc);
     for iMonth = 1:12
         for iDepth = 1:numel(medusa.depth)
-            mesozoo(iLon,iLat,iDepth,iMonth) = mesozooClimatologyRegularMedusa(iLoc,iDepth,iMonth); % mg C m-3
+            mesozoo_regrid(iLon,iLat,iDepth,iMonth) = mesozooClimatologyRegularMedusa(iLoc,iDepth,iMonth); % mg C m-3
         end
     end
 end
 
+% Swap lon and lat dimensions to get lat x lon x depth x time
+mesozoo_regrid_perm = permute(mesozoo_regrid, [2, 1, 3, 4]);
+
 % Save
+mesozoo = mesozoo_regrid_perm;
 mesozoo_lon = x;
 mesozoo_lat = y;
 mesozoo_depth = double(medusa.depth);
@@ -387,8 +398,8 @@ save(fullpathMedusaOutputFile,'mesozoo','mesozoo_lat','mesozoo_lon','mesozoo_dep
 clear mesozoo_lon mesozoo_lat mesozoo_depth mesozoo
 
 % Visual inspection
-plotMonthlyMaps(fullpathMedusaOutputFile,19,'mg C m^{-3}',...
-    0,20,true,[],'fig_monthly_mesozoo_medusa','Mesozooplankton at 50 m, MEDUSA')
+prepareDataForPlotting(fullpathMedusaOutputFile,19,'mg C m^{-3}',...
+    0,20,true,'fig_monthly_mesozoo_medusa','Mesozooplankton at 50 m, MEDUSA')
 
 end % saveClimatologiesInRegularGrid
 

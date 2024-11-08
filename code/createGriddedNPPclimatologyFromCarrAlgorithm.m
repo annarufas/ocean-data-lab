@@ -8,7 +8,7 @@
 % (https://doi.org/10.1016/S0967-0645(01)00094-7) and input data of       %
 % chlorophyll a (chla), sea surface temperature (SST) and photosynthetic  %
 % active radiation in the surface ocean (PAR0). The output array is a     %
-% monthly climatology of 360 x 180 x 12 pixels and has units of           %
+% monthly climatology of 180 x 360 x 12 pixels and has units of           %
 % mg C m-2 d-1.                                                           %                                        
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
@@ -59,12 +59,12 @@ load(fullpathPar0,'par0','par0_lat','par0_lon') ;
 load(fullpathSst,'sst','sst_lat','sst_lon');
 
 % Data grid
-[Xc, Yc, Tc] = ndgrid(chla_lon, chla_lat, (1:12)');
-[Xp, Yp, Tp] = ndgrid(par0_lon, par0_lat, (1:12)');
+[Xc, Yc, Tc] = ndgrid(chla_lat, chla_lon, (1:12)');
+[Xp, Yp, Tp] = ndgrid(par0_lat, par0_lon, (1:12)');
 [Xs, Ys, Ts] = ndgrid(sst_lat, sst_lon, (1:12)');
 
 % Query grid
-[qX, qY, qT] = ndgrid(qLons, qLats, (1:12)');
+[qX, qY, qT] = ndgrid(qLats, qLons, (1:12)');
 
 % Interpolant -use first-order (linear) interpolation and extrapolation
 Fchla = griddedInterpolant(Xc, Yc, Tc, chla, 'linear'); 
@@ -77,7 +77,7 @@ Fsst  = griddedInterpolant(Xs, Ys, Ts, sst, 'linear');
 % to a different one. 
 qChla = Fchla(qX, qY, qT);
 qPar0 = Fpar0(qX, qY, qT);
-qSst = Fsst(qY, qX, qT);
+qSst = Fsst(qX, qY, qT);
 % figure(); pcolor(flipud(rot90(qSst(:,:,1)))); caxis([-2 25]); shading interp;
 
 % =========================================================================
@@ -98,8 +98,8 @@ qNppCarr = Carr2002algorithm(qChla,qSst,qPar0,isZeuCarr); % mg C m-2 d-1
 npp_lat = qLats;
 npp_lon = qLons;
 npp_avg = qNppCarr;
-save(fullpathOutputNppFile,'npp_avg','npp_lon','npp_lat','-v7.3')
+save(fullpathOutputNppFile,'npp_avg','npp_lat','npp_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputNppFile,[],'mg C m^{-2} d^{-1}',...
-    0,1000,true,[],'fig_monthly_npp_carr2002','NPP Carr 2002')
+prepareDataForPlotting(fullpathOutputNppFile,[],'mg C m^{-2} d^{-1}',...
+    0,1000,true,'fig_monthly_npp_carr2002','NPP Carr 2002')

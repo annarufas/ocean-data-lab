@@ -1,11 +1,10 @@
+function prepareDataForPlotting(filePath,iDepth,cbString,caxisMin,caxisMax,...
+    isCommonColourBar,figureName,sgString)
 
-function plotMonthlyMaps(filePath,iDepth,cbString,caxisMin,caxisMax,...
-    isCommonColourBar,figureDirName,figureName,sgString)
-
-% PLOTMONTHLYMAPS Function designed to visualise monthly climatological
-% oceanographic data from a specified file. If the size of the data exceed
+% PREPAREDATAFORPLOTTING Function designed to visualise monthly climatological
+% oceanographic data from a specified file. If the size of the data exceeds
 % a specified threshold set by MATLAB, the function regrids the data to 
-% a lower resolution (2160 x 1080 pixels) using linear interpolation, so 
+% a lower resolution (1080 x 2160 pixels) using linear interpolation, so 
 % that it is faster to plot. If the data are 4D (ie., include depth 
 % dimension), the function extracts a specific depth slice based on the 
 % input iDepth.
@@ -17,14 +16,12 @@ function plotMonthlyMaps(filePath,iDepth,cbString,caxisMin,caxisMax,...
 %       caxisMin          - minimum value for colour axis scaling
 %       caxisMax          - maximum value for colour axis scaling
 %       isCommonColourBar - flag to indicate whether to use a common colour bar for all subplots
-%       figureDirName     - subdirectory name for saving figures
 %       figureName        - name of the figure file to be saved
 %       sgString          - super title or general title for the figure
 %
 %   This script uses these external functions: 
-%       m_map     - from FileExchange
-%       brewermap - from FileExchange
-%       subaxis   - from FileExchange
+%       brewermap             - from FileExchange
+%       plotOceanVariableMaps - custom function
 %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD
 %   Anna.RufasBlanco@earth.ox.ac.uk
@@ -38,7 +35,7 @@ function plotMonthlyMaps(filePath,iDepth,cbString,caxisMin,caxisMax,...
 % -------------------------------------------------------------------------
 
 % Colour scale choice
-myColorMap = flipud(brewermap(100, 'RdYlBu')); % flip to have blue colours for low values
+myColorMap = flipud(brewermap(100,'RdYlBu')); % flip to have blue colours for low values
 
 % Label subplots
 labelMonths = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
@@ -97,7 +94,7 @@ end
 
 % Plot
 plotOceanVariableMaps(data,lon,lat,myColorMap,cbString,caxisMin,caxisMax,...
-    isCommonColourBar,labelMonths,figureDirName,figureName,sgString)
+    isCommonColourBar,labelMonths,figureName,sgString)
 
 % =========================================================================
 %%
@@ -143,4 +140,4 @@ end % regridData
 
 % *************************************************************************
 
-end % plotMonthlyMaps
+end % prepareDataForPlotting

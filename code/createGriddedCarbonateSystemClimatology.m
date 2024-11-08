@@ -15,7 +15,7 @@
 %   - Data from: https://www.nodc.noaa.gov/archive/arc0107/0162565/2.2/data/0-data/mapped/                                  
 %   - CO2SYS: https://www.nodc.noaa.gov/ocads/oceans/CO2SYS/co2rprt.html  %
 %   - Time resolution: annual climatology                                 %
-%   - Space resolution: 1° x 1° (180 x 360)                               %
+%   - Space resolution: 1° x 1° (360 x 180 x 33)                          %
 %   - Version: v2, 2016                                                   %
 %   - Units: Carbonate ion concentration: umol kg-1                       % 
 %            Omega calcite: unitless                                      %
@@ -24,11 +24,12 @@
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
 %                                                                         %
-%   Version 1.0 - Completed 29 Oct 2024                                   %
+%   Version 1.0 - Completed 7 Nov 2024                                    %
 %                                                                         %
 % ======================================================================= %
 
 % Clear workspace, close figures, and add paths to plotting resources
+close all; clear all; clc
 addpath(genpath(fullfile('code')));
 addpath(genpath(fullfile('resources','external'))); 
 addpath(genpath(fullfile('resources','internal'))); 
@@ -116,6 +117,11 @@ co3_sort = co3(sortIdx,:,:);
 omegac_sort = omegac(sortIdx,:,:);
 omegaa_sort = omegaa(sortIdx,:,:);
 
+% Swap lon and lat dimensions to get lat x lon x depth
+co3_sort_perm = permute(co3_sort, [2, 1, 3]);
+omegac_sort_perm = permute(omegac_sort, [2, 1, 3]);
+omegaa_sort_perm = permute(omegaa_sort, [2, 1, 3]);
+
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
@@ -123,25 +129,25 @@ omegaa_sort = omegaa(sortIdx,:,:);
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-figure(); histogram(co3_sort(:),10);
-figure(); histogram(omegac_sort(:),10);
-figure(); histogram(omegaa_sort(:),10);
+figure(); histogram(co3_sort_perm(:),10);
+figure(); histogram(omegac_sort_perm(:),10);
+figure(); histogram(omegaa_sort_perm(:),10);
 
 % Save the data
 glodap_lon = lon_sort;
 glodap_lat = lat;
 glodap_depth = depth;
-carbonateion = co3_sort;
-omegacalcite = omegac_sort;
-omegaaragonite = omegaa_sort;
-save(fullpathOutputCarbonateIonDir,'carbonateion','glodap_lon','glodap_lat','glodap_depth')
-save(fullpathOutputOmegaCalciteDir,'omegacalcite','glodap_lon','glodap_lat','glodap_depth')
-save(fullpathOutputOmegaAragoniteDir,'omegaaragonite','glodap_lon','glodap_lat','glodap_depth')
+carbonateion = co3_sort_perm;
+omegacalcite = omegac_sort_perm;
+omegaaragonite = omegaa_sort_perm;
+save(fullpathOutputCarbonateIonDir,'carbonateion','glodap_lat','glodap_lon','glodap_depth')
+save(fullpathOutputOmegaCalciteDir,'omegacalcite','glodap_lat','glodap_lon','glodap_depth')
+save(fullpathOutputOmegaAragoniteDir,'omegaaragonite','glodap_lat','glodap_lon','glodap_depth')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputCarbonateIonDir,5,'umol kg^{-1}',...
-    0,250,true,[],'fig_monthly_co3ion_co2sys','Carbonate ion at 50 m, CO2SYS')
-plotMonthlyMaps(fullpathOutputOmegaCalciteDir,5,'unitless',...
-    0,5,true,[],'fig_monthly_omegacalcite_co2sys','Omega calcite at 50 m, CO2SYS')
-plotMonthlyMaps(fullpathOutputOmegaAragoniteDir,5,'unitless',...
-    0,5,true,[],'fig_monthly_omegaaragonite_co2sys','Omega aragonite at 50 m, CO2SYS')
+prepareDataForPlotting(fullpathOutputCarbonateIonDir,5,'umol kg^{-1}',...
+    0,250,true,'fig_monthly_co3ion_co2sys','Carbonate ion at 50 m, CO2SYS')
+prepareDataForPlotting(fullpathOutputOmegaCalciteDir,5,'unitless',...
+    0,5,true,'fig_monthly_omegacalcite_co2sys','Omega calcite at 50 m, CO2SYS')
+prepareDataForPlotting(fullpathOutputOmegaAragoniteDir,5,'unitless',...
+    0,5,true,'fig_monthly_omegaaragonite_co2sys','Omega aragonite at 50 m, CO2SYS')

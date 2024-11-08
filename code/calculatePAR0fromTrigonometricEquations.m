@@ -1,10 +1,10 @@
-function [par0photoperiod, lengthPhotoperiod] = calculatePAR0fromEquations(...
+function [par0photoperiod, lengthPhotoperiod] = calculatePAR0fromTrigonometricEquations(...
     latitude, cloudFrac, iceFrac) 
 
-% CALCULATEPAR0 Calculates photosynthetic active radiation in the surface
-% ocean (PAR0) for a point location from trigonometric/astronomical 
-% equations combined with input data of the fraction of clouds and ice 
-% covering the sea.
+% CALCULATEPAR0FROMTRIGONOMETRICEQUATIONS Calculates photosynthetic active 
+% radiation in the surface ocean (PAR0) for a point location from 
+% trigonometric/astronomical equations combined with input data of the 
+% fraction of clouds and ice covering the sea.
 %
 %   INPUT: 
 %       latitude  - in degrees north

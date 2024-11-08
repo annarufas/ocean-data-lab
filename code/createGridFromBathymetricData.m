@@ -41,8 +41,8 @@ depthInterval = 10;      % depth interval for grid layers
 
 % Load bathymetry
 load(fullpathInputBathymetricData,'bathym','bathym_lat','bathym_lon'); 
-lonHighRes = bathym_lon;
 latHighRes = bathym_lat;
+lonHighRes = bathym_lon;
 
 % Matrix for storing seafloor depths (high resolution)
 Dhigh = -1.*bathym; % transform into non-negative numbers
@@ -50,15 +50,15 @@ Dhigh(isnan(Dhigh)) = 0;
 Dhigh(Dhigh > maxSeafloorDepth) = maxSeafloorDepth; % defie maximum depth limit
 
 % Create lower resolution matrix
-lonLowRes = (-179.5:1:179.5);
 latLowRes = (-89.5:1:89.5);
-[X,Y] = ndgrid(bathym_lon,bathym_lat); % original array
-[qX,qY] = ndgrid(lonLowRes,latLowRes); % query points for interpolation 
+lonLowRes = (-179.5:1:179.5);
+[X,Y] = ndgrid(bathym_lat,bathym_lon); % original array
+[qX,qY] = ndgrid(latLowRes,lonLowRes); % query points for interpolation 
 F = griddedInterpolant(X,Y,Dhigh);
 Dlow = F(qX,qY); 
 
 figure()
-pcolor(flipud(rot90(Dlow)))
+pcolor(Dlow)
 shading interp
 colormap(jet)
 box on
@@ -90,10 +90,10 @@ clear x y ixBb iyBb Xbb Ybb Zsb3d Zsb
 function [x,y,ixBb,iyBb,Xbb,Ybb,Zsb3d,Zsb] = generateGrid(D,maxSeafloorDepth,...
     depthInterval,lons,lats)
 
-    nx = length(lons);
-    ny = length(lats);
-    x = lons;
-    y = lats;
+    nx = length(lats);
+    ny = length(lons);
+    x = lats;
+    y = lons;
 
     nz = maxSeafloorDepth/depthInterval; % number of depth layers
     Zsb3d = NaN(nx,ny,nz);               % 3D matrix for depth layers
@@ -106,21 +106,23 @@ function [x,y,ixBb,iyBb,Xbb,Ybb,Zsb3d,Zsb] = generateGrid(D,maxSeafloorDepth,...
     Ybb = zeros(nx*ny, 1);
 
     iLoc = 0; % counter for non-empty cells
-    for iLat = 1:ny
-        for iLon = 1:nx
-            localDepths = (depthInterval/2 : depthInterval : D(iLon,iLat));
+    
+    for iLat = 1:nx
+        for iLon = 1:ny
+            localDepths = (depthInterval/2 : depthInterval : D(iLat,iLon));
             if ~isempty(localDepths)
 
                 % Update 3D and 2D matrices with depth values
                 Zsb(1:length(localDepths),iLoc+1) = localDepths;
-                Zsb3d(iLon,iLat,1:length(localDepths)) = localDepths;
+                Zsb3d(iLat,iLon,1:length(localDepths)) = localDepths;
 
                 % Store coordinates for non-empty cells
                 iLoc = iLoc + 1;
-                ixBb(iLoc) = iLon;
-                iyBb(iLoc) = iLat;
-                Xbb(iLoc) = x(iLon);
-                Ybb(iLoc) = y(iLat);
+                ixBb(iLoc) = iLat;
+                iyBb(iLoc) = iLon;
+                Xbb(iLoc) = x(iLat);
+                Ybb(iLoc) = y(iLon);
+                
             end  
         end
     end

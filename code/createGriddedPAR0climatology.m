@@ -1,14 +1,14 @@
 
 % ======================================================================= %
 %                                                                         %
-%        PAR0 climatology calculated from astronomic/trigonometric        %
+%        PAR0 climatology calculated from trigonometric/astronomic        %
 %         equations and input data of cloud cover and ice fraction        % 
 %                                                                         %
 % This script creates a global gridded climatology of photosynthetic      %
-% available radiation at the surface ocean (PAR0) using astronomic/       %
-% trigonometric equations, incorporating inputs of sea ice fraction (from % 
+% available radiation at the surface ocean (PAR0) using trigonometric/    %
+% astronomic equations, incorporating inputs of sea ice fraction (from    % 
 % CMEMS) and cloud cover (from Pincus et al. (2008)). The output arrays   %
-% are monthly (360 x 180 x 12 pixels) and daily (360 x 180 x 365 pixels)  %
+% are monthly (180 x 360 x 12 pixels) and daily (180 x 360 x 365 pixels)  %
 % climatologies in units of W m-2.                                        %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
@@ -57,10 +57,10 @@ load(fullpathIceFractionClimatology,'icefrac','icefrac_lat','icefrac_lon') % 0-1
 % Load the grid 
 load(fullpathGridFile,'Xbb','Ybb','x','y','ixBb','iyBb') 
 nOceanLocs = length(Ybb);
-oceanLons = Xbb;
-oceanLats = Ybb;
-nOceanLons = length(x);
-nOceanLats = length(y);
+oceanLats = Xbb;
+oceanLons = Ybb;
+nOceanLats = length(x);
+nOceanLons = length(y);
 
 % =========================================================================
 %%
@@ -69,7 +69,7 @@ nOceanLats = length(y);
 % -------------------------------------------------------------------------
 
 % Grids for interpolation
-[Xclo, Yclo, Tclo] = ndgrid(cloudcover_lon, cloudcover_lat, (1:12)');
+[Xclo, Yclo, Tclo] = ndgrid(cloudcover_lat, cloudcover_lon, (1:12)');
 [Xice, Yice, Tice] = ndgrid(icefrac_lat, icefrac_lon, (1:12)');
 
 % Interpolation functions
@@ -86,27 +86,28 @@ Pdaily = NaN(nOceanLocs,365);
 
 for iLoc = 1:nOceanLocs
 
-    qLon = oceanLons(iLoc);   
     qLat = oceanLats(iLoc);
+    qLon = oceanLons(iLoc);   
 
     avgPar0daylight = zeros(365,1); % W m-2
     totPar0daylight = zeros(365,1); % J m-2
     nDaylightHours  = zeros(365,1);
 
-    % Query points for interpolation to get cloud cover
-    [qX, qY, qT] = ndgrid(qLon, qLat, (1:365)');
+    % Query points for interpolation
+    [qX, qY, qT] = ndgrid(qLat, qLon, (1:365)');
+
+    % Get cloud cover
     qCloudFrac = Fclo(qX, qY, qT);
     qCloudFrac(qCloudFrac<0) = 0; % oktas
     qCloudFrac(isnan(qCloudFrac)) = 0; 
 
-    % Query points for interpolation to get ice fraction
-    [qX, qY, qT] = ndgrid(qLat, qLon, (1:365)'); % notice lat/lon reversed from cloud cover
+    % Get ice fraction
     qIceFrac = Fice(qX, qY, qT);
     qIceFrac(qIceFrac<0) = min(qIceFrac(qIceFrac > 0)); % 0-1
     qIceFrac(isnan(qIceFrac)) = 0;
 
     % Calculate the average PAR0 received during the daylight period (nDaylightHours) of each day
-    [avgPar0daylight(:), nDaylightHours(:)] = calculatePAR0fromEquations(...
+    [avgPar0daylight(:), nDaylightHours(:)] = calculatePAR0fromTrigonometricEquations(...
         qLat, squeeze(qCloudFrac), squeeze(qIceFrac)); % W m-2
 
     totPar0daylight(:) = avgPar0daylight(:).*nDaylightHours(:)*3600; % J m-2
@@ -134,14 +135,14 @@ end
 % SECTION 6 - REPOSITION DATA ON A LON/LAT ARRAY
 % -------------------------------------------------------------------------
 
-geo_Pdaily = NaN(nOceanLons,nOceanLats,365);
-geo_Pclim  = NaN(nOceanLons,nOceanLats,12);
+geo_Pdaily = NaN(nOceanLats,nOceanLons,365);
+geo_Pclim  = NaN(nOceanLats,nOceanLons,12);
 
 for iLoc = 1:nOceanLocs
     iLon = ixBb(iLoc);
     iLat = iyBb(iLoc);
-    geo_Pdaily(iLon,iLat,:) = Pdaily(iLoc,:);
-    geo_Pclim(iLon,iLat,:)  = Pclim(iLoc,:);
+    geo_Pdaily(iLat,iLon,:) = Pdaily(iLoc,:);
+    geo_Pclim(iLat,iLon,:)  = Pclim(iLoc,:);
 end 
 
 % =========================================================================
@@ -155,13 +156,13 @@ figure(); histogram(geo_Pclim(:),100);
 figure(); histogram(geo_Pdaily(:),100);
 
 % Save output
-par0_lat = y;
-par0_lon = x;
+par0_lat = x';
+par0_lon = y';
 par0daily = geo_Pdaily;
 par0clim = geo_Pclim;
 save(fullfile(fullpathOutputPar0dailyFile),'par0daily','par0_lat','par0_lon') 
 save(fullfile(fullpathOutputPar0monthlyFile),'par0clim','par0_lat','par0_lon') 
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputPar0monthlyFile,[],'W m^{-2}',...
-    0,200,true,[],'fig_monthly_par0_calculated','PAR0 calculated from equations')
+prepareDataForPlotting(fullpathOutputPar0monthlyFile,[],'W m^{-2}',...
+    0,200,true,'fig_monthly_par0_calculated','PAR0 calculated from equations')

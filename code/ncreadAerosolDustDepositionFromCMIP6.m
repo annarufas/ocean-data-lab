@@ -83,8 +83,11 @@ lon(lon > 180) = lon(lon > 180) - 360; % convert to -180 to 180
 [lon_sort, sortIdx] = sort(lon);
 Dclim_sort = Dclim(sortIdx,:,:);
 
+% Swap lon and lat dimensions to get lat x lon x time
+Dclim_sort_perm = permute(Dclim_sort, [2, 1, 3]);
+
 % Units conversion
-dustflux = Dclim_sort.*1e3; % kg m-2 s-1 --> g m-2 s-1
+dustflux = Dclim_sort_perm.*1e3; % kg m-2 s-1 --> g m-2 s-1
 
 % =========================================================================
 %%
@@ -101,6 +104,6 @@ dustflux_lat = lat;
 save(fullpathOutputDustFile,'dustflux','dustflux_lat','dustflux_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputDustFile,[],'g m^{-2} s^{-1}',...
-    1e-10,1e-7,true,[],'fig_monthly_dust_cmip6','Aerosol dust deposition NCAR-CESM2')
+prepareDataForPlotting(fullpathOutputDustFile,[],'g m^{-2} s^{-1}',...
+    1e-10,1e-7,true,'fig_monthly_dust_cmip6','Aerosol dust deposition NCAR-CESM2')
  

@@ -107,8 +107,8 @@ npp_lon = lon_sort;
 npp_lat = lat_sort;
 npp_avg = netprimaryproduction;
 npp_err = netprimaryproduction_err;
-save(fullpathOutputNppFile,'npp_avg','npp_err','npp_lon','npp_lat','-v7.3')
+save(fullpathOutputNppFile,'npp_avg','npp_err','npp_lat','npp_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputNppFile,[],'mg C m-2 d-1',...
-    0,1000,true,[],'fig_monthly_npp_bicep','NPP BICEP')
+prepareDataForPlotting(fullpathOutputNppFile,[],'mg C m-2 d-1',...
+    0,1000,true,'fig_monthly_npp_bicep','NPP BICEP')

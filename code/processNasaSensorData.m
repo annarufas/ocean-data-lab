@@ -1,4 +1,4 @@
-function [D_sort,lat_sort,lon] = processNasaSensorData(inputDir,prefixTag,...
+function [D_sort_perm,lat_sort,lon] = processNASAsensorData(inputDir,prefixTag,...
     varName,exampleFile)
 
 % PROCESSNASASENSORDATA This function function that encapsulates the 
@@ -12,9 +12,9 @@ function [D_sort,lat_sort,lon] = processNasaSensorData(inputDir,prefixTag,...
 %                     (common arrangament to all files in the climatology)
 %
 %   OUTPUT:
-%       D_sort   - variable
-%       lat_sort - latitudes vector arranged -90 to 90
-%       lon      - longitudes vector arranged -180 to 180
+%       D_sort_perm - variable
+%       lat_sort    - latitudes vector arranged -90 to 90
+%       lon         - longitudes vector arranged -180 to 180
 %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD
 %   Anna.RufasBlanco@earth.ox.ac.uk
@@ -57,5 +57,8 @@ D(D < 0) = 0;
 [lat_sort,sortIdx] = sort(lat);
 D_sort = D(:,sortIdx,:);
 
-end % processNasaSensorData
+% Swap lon and lat dimensions to get lat x lon x time
+D_sort_perm = permute(D_sort, [2, 1, 3]);
+
+end % processNASAsensorData
 

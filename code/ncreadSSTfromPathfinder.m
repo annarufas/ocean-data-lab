@@ -89,5 +89,5 @@ sst_lat = lat_sort;
 save(fullpathOutputSstFile,'sst','sst_lat','sst_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputSstFile,[],'ºC',...
-    -2,35,true,[],'fig_monthly_sst_pathfinder','SST Pathfinder')
+prepareDataForPlotting(fullpathOutputSstFile,[],'ºC',...
+    -2,35,true,'fig_monthly_sst_pathfinder','SST Pathfinder')
