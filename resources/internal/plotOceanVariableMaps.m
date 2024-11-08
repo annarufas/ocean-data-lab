@@ -1,5 +1,5 @@
 function plotOceanVariableMaps(oceanVar,lonVector,latVector,myColormap,cbString,...
-    caxisMin,caxisMax,isCommonColourBar,labelVars,figureDirName,figureName,sgString)
+    caxisMin,caxisMax,isCommonColourBar,labelVars,figureName,sgString)
 
 % PLOTOCEANVARIABLEMAPS Visualises oceanographic data across multiple 
 % subplots, with the option for a common colour bar. It supports different 
@@ -13,8 +13,7 @@ function plotOceanVariableMaps(oceanVar,lonVector,latVector,myColormap,cbString,
 %       cbString          - string label for the colour bar
 %       caxisMin          - minimum value for colour axis scaling
 %       caxisMax          - maximum value for colour axis scaling
-%       isCommonColourBar - boolean indicating whether to use a common colour bar for all subplots
-%       figureDirName     - string specifying the directory name for saving figures
+%       isCommonColourBar - Boolean indicating whether to use a common colour bar for all subplots
 %       figureName        - string specifying the base name for saved figure files
 %       sgString          - string for a super title for the entire figure
 %
@@ -67,7 +66,7 @@ if (nSubplots == 4 && isCommonColourBar)
     cb.Label.String = cbString;
     cb.FontSize = 12;
 
-    saveFigure(figureDirName,figureName)
+    saveFigure(figureName)
 
 elseif (nSubplots == 4 && ~isCommonColourBar)
     
@@ -100,7 +99,7 @@ elseif (nSubplots == 4 && ~isCommonColourBar)
 
     end
 
-    saveFigure(figureDirName,figureName)
+    saveFigure(figureName)
     
 elseif (nSubplots == 3)
 
@@ -127,7 +126,7 @@ elseif (nSubplots == 3)
     cb.Label.String = cbString;
     cb.FontSize = 12;
 
-    saveFigure(figureDirName,figureName)
+    saveFigure(figureName)
 
 elseif (nSubplots == 5)
     
@@ -165,7 +164,7 @@ elseif (nSubplots == 5)
     cb.Label.String = cbString;
     cb.FontSize = 12;
 
-    saveFigure(figureDirName,figureName)
+    saveFigure(figureName)
  
 elseif (nSubplots == 6 && ~isCommonColourBar)
     
@@ -198,7 +197,7 @@ elseif (nSubplots == 6 && ~isCommonColourBar)
 
     end
 
-    saveFigure(figureDirName,figureName)
+    saveFigure(figureName)
 
 elseif (nSubplots == 12)
 
@@ -228,7 +227,7 @@ elseif (nSubplots == 12)
     cb.Label.String = cbString;
     cb.FontSize = 10;
 
-    saveFigure(figureDirName,figureName)
+    saveFigure(figureName)
 
 end
 
