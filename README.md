@@ -1,6 +1,6 @@
 # MATLAB Tools to Work with Oceanographic Datasets
 
-This repository contains a collection of MATLAB scripts that I have developed for reading, formatting and visualising freely-available oceanographic datasets stored in `.nc` files. It includes tools to structure data in `lat x lon x depth x time` formats, essential for further processing, such as data validation, use in model inputs or statistical analysis. Developed across various projects, these scripts are actively maintained, with new additions based on evolving research needs.
+This repository contains a collection of MATLAB scripts that I have developed for reading, formatting and visualising freely-available oceanographic datasets stored in `.nc` (NetCDF) files. It includes tools to organise data into a four-dimensional structure: `latitudes x longitudes x depth levels x 12 months`, essentially creating a climatology. This structure facilitates further data processing, such as data-model validation or model input preparation. Developed across various projects, I actively maintain and update these scripts to meet evolving research needs.
 
 ![README_cover](https://private-user-images.githubusercontent.com/128830450/381775013-29374902-ce79-42ba-9a62-aa9b79ffd9f9.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzAzMzI5NzAsIm5iZiI6MTczMDMzMjY3MCwicGF0aCI6Ii8xMjg4MzA0NTAvMzgxNzc1MDEzLTI5Mzc0OTAyLWNlNzktNDJiYS05YTYyLWFhOWI3OWZmZDlmOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDMwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAzMFQyMzU3NTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04NjIxY2JlMjQ0MDZhNTk5OGYzODg3ZTZlNzM3ZGI0YjgxZGMyYTVlNzFiZmY4YTNhMDlmZjAxM2ZhMmNlNGFlJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.GfIE1ITBz3g7kd5Zt-X6k6Z-TFxTeUXmB3imlSL6aUY)
 
@@ -24,7 +24,7 @@ To use the content of this repository, ensure you have the following.
     - `./internal/`: custom MATLAB functions generated specifically for plotting (*provided*).
 - `./figures/`: figures generated from processed data (*provided*).
 
-Due to large file sizes and variety of licenses that limit re-distribution of data in various ways, raw data are not hosted in the `./data/raw/` folder. Instead, the links for manually obtaining these data (as `.nc` files) are provided in the "Data Sources" section below as well as within the MATLAB scripts in the `./code/` folder. If manual access is difficult, we iclude scripts to download data programmatically. Note that data URLs may change over time, potentially interrupting access. The processed data created by the MATLAB scripts (`.mat`) are placed in the `data/processed/` folder but cannot be provided due to their large size.
+Due to large file sizes and variety of licenses that limit re-distribution of data in various ways, raw data are not hosted in the `./data/raw/` folder. Instead, the links for manually obtaining these data (as `.nc` files) are provided in the "Data Sources" section below as well as within the MATLAB scripts in the `./code/` folder. If manual access is difficult, we iclude scripts to download data programmatically. Note that data URLs may change over time, potentially interrupting access. The processed data created by the MATLAB scripts (`.mat`) are placed in the `./data/processed/` folder but cannot be provided due to their large size.
 
 ## Data Sources
 
@@ -89,31 +89,31 @@ The following scripts are available in the `./code/` folder.
 
 | Num| Script name                                    | Script action                                           |
 |----|------------------------------------------------|----------------------------------------------------------
-| 1  | downloadBGCandPHYSfromCMEMS.ipynb              | Downloads data from CMEMS (must be run before script num. 5)  |                     
-| 2  | downloadChlaFromOCCCI.m                        | Downloads data from OC-CCI (must be run before script num. 7) |  
-| 3  | ncreadAerosolDustDepositionFromCMIP6.m         | Creates `dustflux_cmip6_ncarcesm2.mat` (288 x 192 x 12) |
-| 4  | ncreadBathymetryFromGEBCO.m                    | Creates `bathymetry_gebco.mat` (2160 x 1080)            |
+| 1  | downloadBGCandPHYSfromCMEMS.ipynb              | Downloads data from CMEMS (must be run before script 5)  |                     
+| 2  | downloadChlaFromOCCCI.m                        | Downloads data from OC-CCI (must be run before script 7) |  
+| 3  | ncreadAerosolDustDepositionFromCMIP6.m         | Creates `dustflux_cmip6_ncarcesm2.mat` (192 x 288 x 12) |
+| 4  | ncreadBathymetryFromGEBCO.m                    | Creates `bathymetry_gebco.mat` (1080 x 2160)            |
 | 5  | ncreadBGCandPHYSfromCMEMS.m                    | Creates `chla_cmems_bgc.mat`, `kd_cmems_bgc.mat`, `mld_cmems_phys.mat`, `icefrac_cmems_phys.mat` (1080 x 2160 x 12) and `temp_cmems_phys.mat` (1080 x 2160 x 50 x 12) |
 | 6  | ncreadBGCandPHYSfromWOA.m                      | Creates `nit_monthly_woa23.mat`, `phos_monthly_woa23.mat`, `sil_monthly_woa23.mat`, `temp_monthly_woa23.mat`, `oxy_monthly_woa23.mat` (180 x 360 x 102 x 12) and `temp_annual_woa23.mat` (180 x 360 x 102) |
-| 7  | ncreadChlaFromNASAandOCCCI.m                   | Creates `chla_aquamodis.mat` (8640 x 4320 x 12), `chla_seawifs.mat` (4320 x 2160 x 12) and `chla_occci.mat` (8640 x 4320 x 12) | 
-| 8  | ncreadCloudCoverFromPincus.m                   | Creates `cloudcover_pincus.mat` (144 x 72 x 12)         |
+| 7  | ncreadChlaFromNASAandOCCCI.m                   | Creates `chla_aquamodis.mat` (4320 x 8640 x 12), `chla_seawifs.mat` (2160 x 4320 x 12) and `chla_occci.mat` (4320 x 8640 x 12) | 
+| 8  | ncreadCloudCoverFromPincus.m                   | Creates `cloudcover_pincus.mat` (72 x 144 x 12)         |
 | 9  | ncreadNPPfromBICEP.m                           | Creates `npp_bicep.mat` (2160 x 4320 x 12)              |
 | 10 | ncreadNPPfromOceanProductivitySite.m           | Creates `npp_cafe_seawifs.mat`, `npp_cafe_modis.mat`, `npp_cbpm_modis.mat` and `npp_vgpm_modis.mat` (1080 x 2160 x 12)  |
-| 11 | ncreadMLDfromIFREMER.m                         | Creates `mld_ifremer.mat` (180 x 90 x 12)               |
-| 12 | ncreadPAR0fromNASA.m                           | Creates `par0_aquamodis.mat` (8640 x 4320 x 12) and `par0_seawifs.mat` (4320 x 2160 x 12)  |
+| 11 | ncreadMLDfromIFREMER.m                         | Creates `mld_ifremer.mat` (90 x 180 x 12)               |
+| 12 | ncreadPAR0fromNASA.m                           | Creates `par0_aquamodis.mat` (4320 x 8640 x 12) and `par0_seawifs.mat` (2160 x 4320 x 12)  |
 | 13 | ncreadSSTfromPathfinder.m                      | Creates `sst_pathfinder_v5.mat` (4096 x 8192 x 12)      |
 | 14 | ncreadZooplanktonFromCMIP6.m                   | Creates `mesozoo_cmip6_pisces.mat` (64 x 128 x 75), `mesozoo_cmip6_cobalt.mat` (180 x 360 x 35) and `mesozoo_cmip6_medusa.mat` (64 x 128 x 75) |
-| 15 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (2160 x 1080 x 500) and `grid_GEBCO_360_180.mat` (360 x 180 x 500) (run after script num. 4) |
-| 16 | createGriddedCarbonateSystemClimatology.m      | Creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (360 x 180 x 33 x 12) |
-| 17 | createGriddedPAR0climatology.m                 | Creates `par0_monthly_calculated.mat` (360 x 180 x 12) and `par0_daily_calculated.mat` (360 x 180 x 365) (run after script num. 5, 8 and 15) |
-| 18 | createGriddedZeuClimatology.m                  | Creates `zeu_calculated_onepercentpar0.mat` (1080 x 2160 x 12) (run after script num. 5) |
-| 19 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Creates `npp_carr2002_seawifs_pathfinder.mat` (360 x 180 x 12) |
-| 20 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script num. 14                                 |
-| 21 | calculatePAR0fromEquations.m                   | Called by script num. 17                                 |
-| 22 | Carr2002algorithm.m                            | Called by script num. 19                                 |
-| 23 | processNASAsensorData.m                        | Called by script num. 7 and 12                           |
-| 24 | plotMonthlyMaps.m                              | Creates figures to show monthly climatological data  (figures with `_monthly_` infix)|
+| 15 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (1080 x 2160 x 500) and `grid_GEBCO_360_180.mat` (180 x 360 x 500) (run after script 4) |
+| 16 | createGriddedCarbonateSystemClimatology.m      | Creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
+| 17 | createGriddedPAR0climatology.m                 | Creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365) (run after scripts 5, 8 and 15) |
+| 18 | createGriddedZeuClimatology.m                  | Creates `zeu_calculated_onepercentpar0.mat` (1080 x 2160 x 12) (run after script 5) |
+| 19 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Creates `npp_carr2002_seawifs_pathfinder.mat` (180 x 360 x 12) |
+| 20 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script 14                                 |
+| 21 | calculatePAR0fromTrigonometricEquations.m      | Called by script 17                                 |
+| 22 | Carr2002algorithm.m                            | Called by script 19                                 |
+| 23 | processNASAsensorData.m                        | Called by scripts 7 and 12                           |
+| 24 | prepareDataForPlotting.m                       | Creates figures to show monthly climatological data (figures with `_monthly_` infix)|
 | 25 | plotCrossSourceComparisonMaps.m                | Creates figures to show comparisons of the same variable across datasets (figures with `_comparison_` infix) |
 | 26 | compareInterpolationMethods.m                  | Applies two different interpolation methods to fill data gaps (especially relevant in polar latitudes) and visualises the output |
-| 27 | submit_zoo_regridding.sh                       | Submits script num. 20 to the SLURM job scheduler |   
+| 27 | submit_zoo_regridding.sh                       | Submits script 20 to the SLURM job scheduler |   
 
