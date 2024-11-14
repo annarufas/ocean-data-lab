@@ -1,7 +1,7 @@
 
 % ======================================================================= %
 %                                                                         %
-% This script visually compares three interpolation methods on a global   %
+% This script visually compares two interpolation methods on a global     %
 % chlorophyll a concentration dataset.                                    %
 %                                                                         % 
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
@@ -49,15 +49,15 @@ original_var(isnan(original_var)) = 0;
 
 % Interpolate in time using a 1D time slice vector, improved with respect
 % to default interp1
-[interp_var] = cleverTimeInterpolation(original_var,[1:12]',lats,lons);
+interp_var = cleverTimeInterpolation(original_var,(1:12));
 
 % Save
 chla = interp_var;
 save(fullpathOutputInterpFile1,'chla','chla_lat','chla_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputInterpFile1,[],'mg m^{-3}',...
-    0,1,true,[],'fig_interp_m1_chla_occci','Chla OC-CCI interp M1')
+prepareDataForPlotting(fullpathOutputInterpFile1,[],'mg m^{-3}',...
+    0,1,true,'fig_interp_m1_chla_occci','Chla OC-CCI interp M1')
 
 % =========================================================================
 %%
@@ -95,6 +95,6 @@ chla = interp_var;
 save(fullpathOutputInterpFile2,'chla','chla_lat','chla_lon','-v7.3')
 
 % Visual inspection
-plotMonthlyMaps(fullpathOutputInterpFile2,[],'mg m^{-3}',...
-    0,1,true,[],'fig_interp_m2_chla_occci','Chla OC-CCI interp M2')
+prepareDataForPlotting(fullpathOutputInterpFile2,[],'mg m^{-3}',...
+    0,1,true,'fig_interp_m2_chla_occci','Chla OC-CCI interp M2')
 
