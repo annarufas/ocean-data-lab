@@ -23,7 +23,7 @@
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
 %                                                                         %
-%   Version 1.0 - Completed 5 Nov 2024                                    %
+%   Version 1.0 - Completed 15 Nov 2024                                   %
 %                                                                         %
 % ======================================================================= %
 
@@ -191,18 +191,18 @@ nzOxyWaterCol  = nzOxy + length(deepAnnualOxy(1,1,:));
 nzSilWaterCol  = nzSil + length(deepAnnualSil(1,1,:));
 nzPhosWaterCol = nzPhos + length(deepAnnualPhos(1,1,:));
 
-temp = zeros([nx ny nzTempWaterCol 12]);
-nit = zeros([nx ny nzNitWaterCol 12]);
-oxy = zeros([nx ny nzOxyWaterCol 12]);
-sil = zeros([nx ny nzSilWaterCol 12]);
-phos = zeros([nx ny nzPhosWaterCol 12]);
+allTemp = zeros([nx ny nzTempWaterCol 12]);
+allNit = zeros([nx ny nzNitWaterCol 12]);
+allOxy = zeros([nx ny nzOxyWaterCol 12]);
+allSil = zeros([nx ny nzSilWaterCol 12]);
+allPhos = zeros([nx ny nzPhosWaterCol 12]);
 
 for iMonth = 1:12
-    temp(:,:,:,iMonth) = cat(3,monthlyTemp(:,:,:,iMonth),deepAnnualTemp(:,:,:));
-    nit(:,:,:,iMonth) = cat(3,monthlyNit(:,:,:,iMonth),deepAnnualNit(:,:,:));
-    oxy(:,:,:,iMonth) = cat(3,monthlyOxy(:,:,:,iMonth),deepAnnualOxy(:,:,:));
-    sil(:,:,:,iMonth) = cat(3,monthlySil(:,:,:,iMonth),deepAnnualSil(:,:,:));
-    phos(:,:,:,iMonth) = cat(3,monthlyPhos(:,:,:,iMonth),deepAnnualPhos(:,:,:));    
+    allTemp(:,:,:,iMonth) = cat(3,monthlyTemp(:,:,:,iMonth),deepAnnualTemp(:,:,:));
+    allNit(:,:,:,iMonth) = cat(3,monthlyNit(:,:,:,iMonth),deepAnnualNit(:,:,:));
+    allOxy(:,:,:,iMonth) = cat(3,monthlyOxy(:,:,:,iMonth),deepAnnualOxy(:,:,:));
+    allSil(:,:,:,iMonth) = cat(3,monthlySil(:,:,:,iMonth),deepAnnualSil(:,:,:));
+    allPhos(:,:,:,iMonth) = cat(3,monthlyPhos(:,:,:,iMonth),deepAnnualPhos(:,:,:));    
 end
 
 woa_depth_temp = cat(1,zTemp,zTempA(iLastDepthMonthlyTemp+1:end));
@@ -218,11 +218,11 @@ woa_depth_phos = cat(1,zPhos,zPhosA(iLastDepthMonthlyPhos+1:end));
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-figure(); histogram(temp(:),100);
-figure(); histogram(nit(:),100);
-figure(); histogram(oxy(:),100);
-figure(); histogram(sil(:),100);
-figure(); histogram(phos(:),100);
+figure(); histogram(allTemp(:),100);
+figure(); histogram(allNit(:),100);
+figure(); histogram(allOxy(:),100);
+figure(); histogram(allSil(:),100);
+figure(); histogram(allPhos(:),100);
 
 % % Visual evolution over depth
 % figure()
@@ -243,7 +243,12 @@ figure(); histogram(phos(:),100);
 % end
 % close(myVideo)
 
-% Save modified monthly climatology
+% Permute dimensions arrangement before saving
+nit = permute(allNit, [2, 1, 3, 4]); 
+phos = permute(allPhos, [2, 1, 3, 4]); 
+sil = permute(allSil, [2, 1, 3, 4]); 
+temp = permute(allTemp, [2, 1, 3, 4]); 
+oxy = permute(allOxy, [2, 1, 3, 4]); 
 woa_lat = lat;
 woa_lon = lon;
 save(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyNit),...
@@ -257,11 +262,11 @@ save(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyTemp),...
 save(fullfile(fullpathOutputWoaDir,filenameOutputWoaMonthlyOxy),...
     'oxy','woa_lat','woa_lon','woa_depth_oxy')
 
-% Save annual temperature
+% Permute dimensions arrangement before saving
 woa_annual_lat = latA;
 woa_annual_lon = lonA;
 woa_annual_depth_temp = zTempA;
-temp_annual = annualTemp;
+temp_annual = permute(annualTemp, [2, 1, 3]);
 temp_annual_std = annualTempStd;
 save(fullfile(fullpathOutputWoaDir,filenameOutputWoaAnnualTemp),...
     'temp_annual','temp_annual_std','woa_annual_depth_temp','woa_annual_lat','woa_annual_lon')
