@@ -267,7 +267,7 @@ woa_annual_lat = latA;
 woa_annual_lon = lonA;
 woa_annual_depth_temp = zTempA;
 temp_annual = permute(annualTemp, [2, 1, 3]);
-temp_annual_std = annualTempStd;
+temp_annual_std = permute(annualTempStd, [2, 1, 3]);
 save(fullfile(fullpathOutputWoaDir,filenameOutputWoaAnnualTemp),...
     'temp_annual','temp_annual_std','woa_annual_depth_temp','woa_annual_lat','woa_annual_lon')
 
