@@ -1,6 +1,6 @@
 data/processed/*.mat
-data/raw/*
-resources/external/
+data/raw/*/
+resources/external/*/
 notinuse/
 tests/
 figures/*.pdf
