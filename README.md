@@ -2,7 +2,7 @@
 
 This repository contains a collection of MATLAB scripts that I have developed for reading, formatting and visualising freely-available oceanographic datasets stored in `.nc` (NetCDF) files. It includes tools to organise data into a four-dimensional structure: `latitudes x longitudes x depth levels x 12 months`, essentially creating a climatology. This structure facilitates further data processing, such as data-model validation or model input preparation. Developed across various projects, I actively maintain and update these scripts to meet evolving research needs.
 
-![README_cover](https://private-user-images.githubusercontent.com/128830450/381775013-29374902-ce79-42ba-9a62-aa9b79ffd9f9.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzAzMzI5NzAsIm5iZiI6MTczMDMzMjY3MCwicGF0aCI6Ii8xMjg4MzA0NTAvMzgxNzc1MDEzLTI5Mzc0OTAyLWNlNzktNDJiYS05YTYyLWFhOWI3OWZmZDlmOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQxMDMwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MTAzMFQyMzU3NTBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04NjIxY2JlMjQ0MDZhNTk5OGYzODg3ZTZlNzM3ZGI0YjgxZGMyYTVlNzFiZmY4YTNhMDlmZjAxM2ZhMmNlNGFlJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.GfIE1ITBz3g7kd5Zt-X6k6Z-TFxTeUXmB3imlSL6aUY)
+![README_cover](https://github.com/user-attachments/assets/47675b22-1fcf-45a8-bf5e-74500a38842d)
 
 ## Requirements
 
