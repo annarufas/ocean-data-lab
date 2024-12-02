@@ -93,7 +93,7 @@ kpar = calculateKpar(qMld, qKdCmems);
 zeu = calculateZeu(kpar, isOnePercentPar0);           
                   
 % Check for spurious data points
-figure(); histogram(zeu(:), 100);
+%figure(); histogram(zeu(:), 100);
 
 % Save output
 zeu_lat = qLats;
@@ -103,7 +103,7 @@ save(fullfile(fullpathOutputZeuFile),'zeu','zeu','zeu_lat','zeu_lon','-v7.3')
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputZeuFile,[],'m',...
-    0,200,true,strcat('fig_monthly_zeu_calculated_kdcmems_mldcmems',filenameTag),'Zeu calculated from CMEMS kd')
+    0,200,true,strcat('fig_monthly_zeu_calculated_kdcmems_mldcmems_',filenameTag),'Zeu calculated from CMEMS kd')
 
 clear kpar zeu
 
@@ -117,7 +117,7 @@ kpar = calculateKpar(qMld, qKdAquaModis);
 zeu = calculateZeu(kpar, isOnePercentPar0);           
                   
 % Check for spurious data points
-figure(); histogram(zeu(:), 100);
+%figure(); histogram(zeu(:), 100);
 
 % Save output
 zeu_lat = qLats;

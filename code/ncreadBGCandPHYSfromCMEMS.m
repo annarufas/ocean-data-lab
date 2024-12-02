@@ -44,8 +44,7 @@ addpath(genpath(fullfile('figures')))
 % -------------------------------------------------------------------------
 
 % As defined in the Jupyter Notebook "downloadBGCandPHYSfromCMEMS.ipynb"
-filenameInput = {'mod_bgc_glo_npp.nc',...
-                 'mod_bgc_glo_npp_uncertainty.nc',...
+filenameInput = {'mod_bgc_glo_npp.nc',... % 'mod_bgc_glo_npp_uncertainty.nc',...
                  'mod_bgc_glo_chla.nc',...
                  'mod_bgc_glo_kd.nc',...
                  'mod_phys_glo_mld.nc',...
@@ -116,7 +115,7 @@ cmemsData = struct('ID', {}, 'varNames', {}, 'units', {}, 'dataset', {},...
     'lat', {}, 'lon', {}, 'time', {}, 'depth', {});
 
 % Loop over the grouped files
-for iDataset = 1:length(terms)
+for iDataset = 1:3 %length(terms)
     term = terms{iDataset};
     files = groupedFiles.(term);
         
@@ -345,7 +344,7 @@ for iDataset = 1:length(terms)
         end % checking memory requirements
 
         % Check for spurious data points
-        figure(); histogram(Dclim(:),100);
+        %figure(); histogram(Dclim(:),100);
         
         % If this is an uncertainty file, append it to the data (Dclimall)
         if contains(fileName, 'uncertainty')
@@ -411,9 +410,7 @@ function Dtmp = handleUncertainty(Dmeansource,D,idxMonth,type)
 % Function to deal with uncertainty arrays and perform error propagation.
 
     for iRow = 1:size(Dmeansource,1)
-        disp(iRow)
         for iCol = 1:size(Dmeansource,2)
-
             if strcmp(type,'depth')
                 
                 for iDepth = 1:size(Dmeansource,3)
@@ -462,11 +459,11 @@ function saveAndVisualiseOutput(term,Dclimall,lat,lon,depth,...
     if strcmp(term,'npp')
 
         npp_avg = Dclimall(:,:,:,1);
-        npp_err = Dclimall(:,:,:,2);
+        %npp_err = Dclimall(:,:,:,2);
         npp_lat = lat;
         npp_lon = lon;
         save(fullfile(fullpathOutputCmemsDir,filenameOutput),...
-            'npp_avg','npp_err','npp_lat','npp_lon','-v7.3')
+            'npp_avg','npp_lat','npp_lon','-v7.3')
 
         % Visual inspection
         prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput),[],'mg C m-2 d-1',...
@@ -486,12 +483,12 @@ function saveAndVisualiseOutput(term,Dclimall,lat,lon,depth,...
 
     elseif strcmp(term,'kd')
 
-        kd_avg = Dclimall(:,:,:,1);
-        kd_err = Dclimall(:,:,:,2);
+        kd = Dclimall(:,:,:,1);
+        %kd_err = Dclimall(:,:,:,2);
         kd_lat = lat;
         kd_lon = lon;
         save(fullfile(fullpathOutputCmemsDir,filenameOutput),...
-            'kd_avg','kd_err','kd_lat','kd_lon','-v7.3')   
+            'kd','kd_lat','kd_lon','-v7.3')   
 
         % Visual inspection
         prepareDataForPlotting(fullfile(fullpathOutputCmemsDir,filenameOutput),[],'m^{-1}',...

@@ -139,8 +139,8 @@ geo_Pdaily = NaN(nOceanLats,nOceanLons,365);
 geo_Pclim  = NaN(nOceanLats,nOceanLons,12);
 
 for iLoc = 1:nOceanLocs
-    iLon = iyBb(iLoc);
-    iLat = ixBb(iLoc);
+    iLon = ixBb(iLoc);
+    iLat = iyBb(iLoc);
     geo_Pdaily(iLat,iLon,:) = Pdaily(iLoc,:);
     geo_Pclim(iLat,iLon,:)  = Pclim(iLoc,:);
 end 
@@ -162,7 +162,7 @@ par0daily = geo_Pdaily;
 par0clim = geo_Pclim;
 save(fullfile(fullpathOutputPar0dailyFile),'par0daily','par0_lat','par0_lon') 
 save(fullfile(fullpathOutputPar0monthlyFile),'par0clim','par0_lat','par0_lon') 
-
+%%
 % Visual inspection
 prepareDataForPlotting(fullpathOutputPar0monthlyFile,[],'W m^{-2}',...
     0,200,true,'fig_monthly_par0_calculated','PAR0 calculated from equations')
