@@ -1,4 +1,4 @@
-data/processed/*
+data/processed/*.mat
 data/raw/*
 resources/external/
 notinuse/
