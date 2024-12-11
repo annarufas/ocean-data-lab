@@ -1,0 +1,11 @@
+data/processed/*.mat
+data/raw/*/
+resources/external/*/
+notinuse/
+tests/
+figures/*.pdf
+code/*.asv
+code/*checkpoint*
+README_cover.png
+.DS_Store
+
