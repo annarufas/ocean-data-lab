@@ -160,7 +160,7 @@ par0_lat = x';
 par0_lon = y';
 par0daily = geo_Pdaily;
 par0clim = geo_Pclim;
-save(fullfile(fullpathOutputPar0dailyFile),'par0daily','par0_lat','par0_lon') 
+save(fullfile(fullpathOutputPar0dailyFile),'par0daily','nDaylightHours','par0_lat','par0_lon') 
 save(fullfile(fullpathOutputPar0monthlyFile),'par0clim','par0_lat','par0_lon') 
 
 % Visual inspection

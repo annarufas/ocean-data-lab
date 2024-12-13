@@ -1,7 +1,7 @@
-function [D_sort_perm,lat_sort,lon] = processNASAsensorData(inputDir,prefixTag,...
+function [D_sort_perm,lat_sort,lon] = processSensorDataFromNASA(inputDir,prefixTag,...
     varName,exampleFile)
 
-% PROCESSNASASENSORDATA This function function that encapsulates the 
+% PROCESSSENSORDATAFROMNASA This function function that encapsulates the 
 % flow to extract data from NASA's Ocean Color sensors.
 % 
 %   INPUT: 
@@ -60,5 +60,5 @@ D_sort = D(:,sortIdx,:);
 % Swap lon and lat dimensions to get lat x lon x time
 D_sort_perm = permute(D_sort, [2, 1, 3]);
 
-end % processNASAsensorData
+end % processSensorDataFromNASA
 
