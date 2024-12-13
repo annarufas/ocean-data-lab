@@ -54,7 +54,7 @@ The specific oceanographic datasets accessed and processed by this repository in
     - [GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/#global)
 - Carbonate system variables (carbonate ion concentration, omega calcite and omega aragonite)
     - [GLODAPv2.2016b](https://www.nodc.noaa.gov/archive/arc0107/0162565/2.2/data/0-data/mapped/)/[CO2SYS](https://www.ncei.noaa.gov/access/ocean-carbon-acidification-data-system/oceans/CO2SYS/co2rprt.html)
-- Chlorophyll a (chla) concentration
+- Chlorophyll *a* (chla) concentration
     - [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/)
     - [OC-CCI](https://www.oceancolour.org/thredds/ncss/cci/v6.0-release/geographic/monthly/chlor_a/)
     - [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description)
@@ -91,8 +91,8 @@ The following scripts are available in the `./code/` folder.
 
 | Num| Script name                                    | Script action                                           |
 |----|------------------------------------------------|----------------------------------------------------------
-| 1  | downloadBGCandPHYSfromCMEMS.ipynb              | Downloads data from CMEMS (must be run before script 5)  |                     
-| 2  | downloadChlaFromOCCCI.m                        | Downloads data from OC-CCI (must be run before script 7) |  
+| 1  | downloadBGCandPHYSfromCMEMS.ipynb              | Downloads data from CMEMS. Must be run before script 5.  |                     
+| 2  | downloadChlaFromOCCCI.m                        | Downloads data from OC-CCI. Must be run before script 7. |  
 | 3  | ncreadAerosolDustDepositionFromCMIP6.m         | Creates `dustflux_cmip6_ncarcesm2.mat` (192 x 288 x 12) |
 | 4  | ncreadBathymetryFromGEBCO.m                    | Creates `bathymetry_gebco.mat` (1080 x 2160)            |
 | 5  | ncreadBGCandPHYSfromCMEMS.m                    | Creates `chla_cmems_bgc.mat`, `kd_cmems_bgc.mat`, `mld_cmems_phys.mat`, `icefrac_cmems_phys.mat` (1080 x 2160 x 12) and `temp_cmems_phys.mat` (1080 x 2160 x 50 x 12) |
@@ -106,15 +106,15 @@ The following scripts are available in the `./code/` folder.
 | 13 | ncreadPAR0fromNASA.m                           | Creates `par0_aquamodis.mat` (4320 x 8640 x 12) and `par0_seawifs.mat` (2160 x 4320 x 12)  |
 | 14 | ncreadSSTfromPathfinder.m                      | Creates `sst_pathfinder_v5.mat` (4096 x 8192 x 12)      |
 | 15 | ncreadZooplanktonFromCMIP6.m                   | Creates `mesozoo_cmip6_pisces.mat` (64 x 128 x 75), `mesozoo_cmip6_cobalt.mat` (180 x 360 x 35) and `mesozoo_cmip6_medusa.mat` (64 x 128 x 75) |
-| 16 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (1080 x 2160 x 500) and `grid_GEBCO_360_180.mat` (180 x 360 x 500) (run after script 4) |
-| 17 | createGriddedCarbonateSystemClimatology.m      | Creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
-| 18 | createGriddedPAR0climatology.m                 | Creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365) (run after scripts 6, 9 and 16) |
-| 19 | createGriddedZeuClimatology.m                  | Creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdaquamodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12) (run after scripts 5 and 9) |
-| 20 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Creates `npp_carr2002_seawifs_pathfinder.mat` (180 x 360 x 12) |
+| 16 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (1080 x 2160 x 500) and `grid_GEBCO_360_180.mat` (180 x 360 x 500). Must be run after script 4. |
+| 17 | createGriddedCarbonateSystemClimatology.m      | Calculates carbonate system variables using CO2SYS and creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
+| 18 | createGriddedPAR0climatology.m                 | Calculates PAR<sub>0</sub> from cloud and ice cover data and creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365). Must be run after scripts 6, 9 and 16. |
+| 19 | createGriddedZeuClimatology.m                  | Calculates z<sub>eu</sub> from k<sub>d</sub> and MLD and creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdaquamodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12). Must be run after scripts 5 and 9. |
+| 20 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder.mat` (180 x 360 x 12). Must be run after scripts 7, 13 and 14.  |
 | 21 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script 15                                 |
 | 22 | calculatePAR0fromTrigonometricEquations.m      | Called by script 18                                 |
 | 23 | Carr2002algorithm.m                            | Called by script 20                                 |
-| 24 | processNASAsensorData.m                        | Called by scripts 8 and 13                          |
+| 24 | processSensorDataFromNASA.m                    | Called by scripts 7, 9 and 13                       |
 | 25 | prepareDataForPlotting.m                       | Creates figures to show monthly climatological data (figures with `_monthly_` infix)|
 | 26 | plotCrossSourceComparisonMaps.m                | Creates figures to show comparisons of the same variable across datasets (figures with `_comparison_` infix) |
 | 27 | compareInterpolationMethods.m                  | Applies two different interpolation methods to fill data gaps (especially relevant in polar latitudes) and visualises the output |
