@@ -35,7 +35,7 @@ function prepareDataForPlotting(filePath,iDepth,cbString,caxisMin,caxisMax,...
 % -------------------------------------------------------------------------
 
 % Colour scale choice
-myColorMap = flipud(brewermap(100,'RdYlBu')); % flip to have blue colours for low values
+myColourMap = flipud(brewermap(100,'RdYlBu')); % flip to have blue colours for low values
 
 % Label subplots
 labelMonths = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
@@ -93,7 +93,7 @@ if (max(abs(orderMax),abs(orderMin)) - min(abs(orderMax),abs(orderMin))) > 5 &&.
 end
 
 % Plot
-plotOceanVariableMaps(data,lon,lat,myColorMap,cbString,caxisMin,caxisMax,...
+plotOceanVariableMaps(data,lon,lat,myColourMap,cbString,caxisMin,caxisMax,...
     isCommonColourBar,labelMonths,figureName,sgString)
 
 % =========================================================================

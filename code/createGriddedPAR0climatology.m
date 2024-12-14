@@ -33,6 +33,7 @@ addpath(genpath(fullfile('figures')))
 
 % Output files
 fullpathOutputPar0dailyFile = fullfile('data','processed','par0_daily_calculated.mat');
+fullpathOutputNumDaylightHoursFile = fullfile('data','processed','ndaylighthours_daily_calculated.mat');
 fullpathOutputPar0monthlyFile = fullfile('data','processed','par0_monthly_calculated.mat');
 
 % Cloud cover and ice fraction data
@@ -83,6 +84,7 @@ Fice = griddedInterpolant(Xice, Yice, Tice, icefrac, 'linear', 'none');
 % -------------------------------------------------------------------------
 
 Pdaily = NaN(nOceanLocs,365);
+nDaylightHours = NaN(nOceanLocs,365);
 
 for iLoc = 1:nOceanLocs
 
@@ -91,14 +93,13 @@ for iLoc = 1:nOceanLocs
 
     avgPar0daylight = zeros(365,1); % W m-2
     totPar0daylight = zeros(365,1); % J m-2
-    nDaylightHours  = zeros(365,1);
 
     % Query points for interpolation
     [qX, qY, qT] = ndgrid(qLat, qLon, (1:365)');
 
     % Get cloud cover
     qCloudFrac = Fclo(qX, qY, qT);
-    qCloudFrac(qCloudFrac<0) = 0; % oktas
+    qCloudFrac(qCloudFrac<0) = 0;
     qCloudFrac(isnan(qCloudFrac)) = 0; 
 
     % Get ice fraction
@@ -107,11 +108,13 @@ for iLoc = 1:nOceanLocs
     qIceFrac(isnan(qIceFrac)) = 0;
 
     % Calculate the average PAR0 received during the daylight period (nDaylightHours) of each day
-    [avgPar0daylight(:), nDaylightHours(:)] = calculatePAR0fromTrigonometricEquations(...
+    [avgPar0daylight, nDaylightHours(iLoc,:)] = calculatePAR0fromTrigonometricEquations(...
         qLat, squeeze(qCloudFrac), squeeze(qIceFrac)); % W m-2
 
-    totPar0daylight(:) = avgPar0daylight(:).*nDaylightHours(:)*3600; % J m-2
-    Pdaily(iLoc,:) = totPar0daylight(:)./(24*3600); % J m-2 --> W m-2 (= J s-1 m-2)
+    % Calculate total PAR0 during daylight and daily mean PAR0
+    totPar0daylight = avgPar0daylight.*squeeze(nDaylightHours(iLoc,:))'*3600; % J m-2
+    Pdaily(iLoc,:) = totPar0daylight./(24*3600); % J m-2 --> W m-2 (= J s-1 m-2)
+    
 end    
 
 % =========================================================================
@@ -135,12 +138,14 @@ end
 % SECTION 6 - REPOSITION DATA ON A LON/LAT ARRAY
 % -------------------------------------------------------------------------
 
+geo_nDaylightHours = NaN(nOceanLats,nOceanLons,365);
 geo_Pdaily = NaN(nOceanLats,nOceanLons,365);
 geo_Pclim  = NaN(nOceanLats,nOceanLons,12);
 
 for iLoc = 1:nOceanLocs
     iLon = iyBb(iLoc);
     iLat = ixBb(iLoc);
+    geo_nDaylightHours(iLat,iLon,:) = nDaylightHours(iLoc,:);
     geo_Pdaily(iLat,iLon,:) = Pdaily(iLoc,:);
     geo_Pclim(iLat,iLon,:)  = Pclim(iLoc,:);
 end 
@@ -160,7 +165,9 @@ par0_lat = x';
 par0_lon = y';
 par0daily = geo_Pdaily;
 par0clim = geo_Pclim;
-save(fullfile(fullpathOutputPar0dailyFile),'par0daily','nDaylightHours','par0_lat','par0_lon') 
+par0daylighthours = geo_nDaylightHours;
+save(fullfile(fullpathOutputPar0dailyFile),'par0daily','par0_lat','par0_lon') 
+save(fullfile(fullpathOutputNumDaylightHoursFile),'par0daylighthours','par0_lat','par0_lon') 
 save(fullfile(fullpathOutputPar0monthlyFile),'par0clim','par0_lat','par0_lon') 
 
 % Visual inspection

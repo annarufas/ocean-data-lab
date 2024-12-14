@@ -32,20 +32,21 @@ addpath(genpath(fullfile('figures')))
 % -------------------------------------------------------------------------
 
 % Output file
-fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_seawifs_pathfinder.mat');
+fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_seawifs_pathfinder_zeuc02.mat');
+fullpathFigureName = 'fig_monthly_npp_carr2002_zeuc02';
+
+% Choice of euphotic layer depth for the implementation of Carr 2002
+% algorithm, where 1=Carr 2002, 0=Behrenfeld & Falkowski 1997 (as in Henson et al. 2012)
+isZeuCarr = 1; 
 
 % Input data files
-fullpathChla = fullfile('data','processed','chla_seawifs.mat'); % mg chla m-3
-fullpathPar0 = fullfile('data','processed','par0_seawifs.mat'); % W m-2
-fullpathSst  = fullfile('data','processed','sst_pathfinder_v5.mat'); % ºC
+fullpathInputChla = fullfile('data','processed','chla_seawifs.mat'); % mg chla m-3
+fullpathInputPar0 = fullfile('data','processed','par0_seawifs.mat'); % W m-2
+fullpathInputSst  = fullfile('data','processed','sst_pathfinder_v5.mat'); % ºC
 
 % Query points for interpolation
 qLats = (-89.5:1:89.5)';
 qLons = (-179.5:1:179.5)';
-
-% Choice of euphotic layer depth for the implementation of Carr 2002
-% algorithm, where 1=Carr 2002, 0=Behrenfeld & Falkowski 1997 (as in Henson et al. 2012)
-isZeuCarr = 0; 
 
 % =========================================================================
 %%
@@ -54,9 +55,9 @@ isZeuCarr = 0;
 % -------------------------------------------------------------------------
 
 % Load input data
-load(fullpathChla,'chla','chla_lat','chla_lon');
-load(fullpathPar0,'par0','par0_lat','par0_lon') ;
-load(fullpathSst,'sst','sst_lat','sst_lon');
+load(fullpathInputChla,'chla','chla_lat','chla_lon');
+load(fullpathInputPar0,'par0','par0_lat','par0_lon') ;
+load(fullpathInputSst,'sst','sst_lat','sst_lon');
 
 % Data grid
 [Xc, Yc, Tc] = ndgrid(chla_lat, chla_lon, (1:12)');
@@ -102,4 +103,4 @@ save(fullpathOutputNppFile,'npp_avg','npp_lat','npp_lon','-v7.3')
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputNppFile,[],'mg C m^{-2} d^{-1}',...
-    0,1000,true,'fig_monthly_npp_carr2002','NPP Carr 2002')
+    0,1000,true,fullpathFigureName,'NPP Carr 2002')
