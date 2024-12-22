@@ -57,6 +57,7 @@ The specific oceanographic datasets accessed and processed by this repository in
     - [GLODAPv2.2016b](https://www.nodc.noaa.gov/archive/arc0107/0162565/2.2/data/0-data/mapped/)/[CO2SYS](https://www.ncei.noaa.gov/access/ocean-carbon-acidification-data-system/oceans/CO2SYS/co2rprt.html)
 - Chlorophyll *a* (chla) concentration
     - [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/)
+    - [NASA SeaWiFS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/seawifs/)
     - [OC-CCI](https://www.oceancolour.org/thredds/ncss/cci/v6.0-release/geographic/monthly/chlor_a/)
     - [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description)
 - Diffuse attenuation coefficient at 490 nm (k<sub>d</sub>(490))
