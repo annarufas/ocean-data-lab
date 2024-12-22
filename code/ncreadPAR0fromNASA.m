@@ -45,7 +45,7 @@ addpath(genpath(fullfile('figures')))
 
 fullpathInputPar0AquaModisDir = fullfile('data','raw','PAR0','AquaMODIS');
 fullpathInputPar0SeawifsDir = fullfile('data','raw','PAR0','SeaWiFS');
-fullpathOutputPar0AquaModisFile = fullfile('data','processed','par0_aquamodis.mat');
+fullpathOutputPar0AquaModisFile = fullfile('data','processed','par0_modis.mat');
 fullpathOutputPar0SeawifsFile = fullfile('data','processed','par0_seawifs.mat');
 
 % =========================================================================
@@ -75,7 +75,7 @@ save(fullpathOutputPar0AquaModisFile,'par0','par0_lat','par0_lon','-v7.3');
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputPar0AquaModisFile,[],'W m^{-2}',...
-    0,200,true,'fig_monthly_par0_aquamodis','PAR0 Aqua-MODIS')
+    0,200,true,'fig_monthly_par0_modis','PAR0 Aqua-MODIS')
  
 % =========================================================================
 %%
