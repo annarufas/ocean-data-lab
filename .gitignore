@@ -5,7 +5,8 @@ notinuse/
 tests/
 figures/*.pdf
 code/*.asv
-code/*checkpoint*
+code/*.asv
+resources/internal/*.asv
 README_cover.png
 .DS_Store
 
