@@ -2,7 +2,7 @@
 
 This repository contains a collection of MATLAB scripts that I have developed for reading, formatting and visualising freely-available oceanographic datasets stored in `.nc` (NetCDF) files. It includes tools to organise data into a four-dimensional structure: `latitudes x longitudes x depth levels x 12 months`, essentially creating a climatology. This structure facilitates further data processing, such as data-model validation or model input preparation. Developed across various projects, I actively maintain and update these scripts to meet evolving research needs.
 
-![README_cover](https://github.com/user-attachments/assets/44fb8622-59b6-4843-b2db-d3a930cdb445)
+![fig_monthly_npp_carr2002_modis_zeuc02](https://github.com/user-attachments/assets/575ce382-6daf-4242-b8e5-d00b324a0245)
 
 ## Requirements
 
@@ -103,21 +103,21 @@ The following scripts are available in the `./code/` folder. Notice all datasets
 | 5  | ncreadBathymetryFromGEBCO.m                    | Creates `bathymetry_gebco.mat` (1080 x 2160)            |
 | 6  | ncreadBGCandPHYSfromCMEMS.m                    | Creates `chla_cmems_bgc.mat`, `kd_cmems_bgc.mat`, `mld_cmems_phys.mat`, `icefrac_cmems_phys.mat` (1080 x 2160 x 12) and `temp_cmems_phys.mat` (1080 x 2160 x 50 x 12) |
 | 7  | ncreadBGCandPHYSfromWOA.m                      | Creates `nit_monthly_woa23.mat`, `phos_monthly_woa23.mat`, `sil_monthly_woa23.mat`, `temp_monthly_woa23.mat`, `oxy_monthly_woa23.mat` (180 x 360 x 102 x 12) and `temp_annual_woa23.mat` (180 x 360 x 102) |
-| 8  | ncreadChlaFromNASAandOCCCI.m                   | Creates `chla_aquamodis.mat` (4320 x 8640 x 12), `chla_seawifs.mat` (2160 x 4320 x 12) and `chla_occci.mat` (4320 x 8640 x 12) | 
+| 8  | ncreadChlaFromNASAandOCCCI.m                   | Creates `chla_modis.mat` (4320 x 8640 x 12), `chla_seawifs.mat` (2160 x 4320 x 12) and `chla_occci.mat` (4320 x 8640 x 12) | 
 | 9  | ncreadCloudCoverFromPincus.m                   | Creates `cloudcover_pincus.mat` (72 x 144 x 12)         |
-| 10 | ncreadKdFromNASA.m                             | Creates `kd_aquamodis.mat` (4320 x 8640 x 12)           |
+| 10 | ncreadKdFromNASA.m                             | Creates `kd_modis.mat` (4320 x 8640 x 12)           |
 | 11 | ncreadNPPfromBICEP.m                           | Creates `npp_bicep.mat` (2160 x 4320 x 12)              |
 | 12 | ncreadNPPfromOceanProductivitySite.m           | Creates `npp_cafe_seawifs.mat`, `npp_cafe_modis.mat`, `npp_cbpm_modis.mat` and `npp_vgpm_modis.mat` (1080 x 2160 x 12)  |
 | 13 | ncreadMLDfromIFREMER.m                         | Creates `mld_ifremer.mat` (90 x 180 x 12)               |
 | 14 | ncreadPAR0fromGlobColour.m                     | Creates `par0_globcolour.mat` (180 x 360 x 12)          |
-| 15 | ncreadPAR0fromNASA.m                           | Creates `par0_aquamodis.mat` (4320 x 8640 x 12) and `par0_seawifs.mat` (2160 x 4320 x 12)  |
+| 15 | ncreadPAR0fromNASA.m                           | Creates `par0_modis.mat` (4320 x 8640 x 12) and `par0_seawifs.mat` (2160 x 4320 x 12)  |
 | 16 | ncreadSSTfromPathfinder.m                      | Creates `sst_pathfinder_v5.mat` (4096 x 8192 x 12)      |
 | 17 | ncreadZooplanktonFromCMIP6.m                   | Creates `mesozoo_cmip6_pisces.mat` (64 x 128 x 75), `mesozoo_cmip6_cobalt.mat` (180 x 360 x 35) and `mesozoo_cmip6_medusa.mat` (64 x 128 x 75) |
 | 18 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (1080 x 2160 x 500) and `grid_GEBCO_360_180.mat` (180 x 360 x 500). Must be run after script 5. |
 | 19 | createGriddedCarbonateSystemClimatology.m      | Calculates carbonate system variables using CO2SYS and creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
 | 20 | createGriddedPAR0climatology.m                 | Calculates PAR<sub>0</sub> from cloud and ice cover data and creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365). Must be run after scripts 6, 9 and 18 |
-| 21 | createGriddedZeuClimatology.m                  | Calculates z<sub>eu</sub> from k<sub>d</sub>(490) and MLD and creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdaquamodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12). Must be run after scripts 6 and 10 |
-| 22 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder.mat` (180 x 360 x 12). Must be run after scripts 8, 15 and 16  |
+| 21 | createGriddedZeuClimatology.m                  | Calculates z<sub>eu</sub> from k<sub>d</sub>(490) and MLD and creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdmodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12). Must be run after scripts 6 and 10 |
+| 22 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder_zeuc02.mat` and `npp_carr2002_modis_pathfinder_zeuc02.mat` (180 x 360 x 12). Must be run after scripts 8, 15 and 16  |
 | 23 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script 17                                 |
 | 24 | calculatePAR0fromTrigonometricEquations.m      | Called by script 20                                 |
 | 25 | Carr2002algorithm.m                            | Called by script 22                                 |
@@ -127,3 +127,8 @@ The following scripts are available in the `./code/` folder. Notice all datasets
 | 29 | compareInterpolationMethods.m                  | Applies two different interpolation methods to fill data gaps (especially relevant in polar latitudes) and visualises the output |
 | 30 | submit_zoo_regridding.sh                       | Submits script 23 to the SLURM job scheduler |   
 
+## Cite as
+
+If you use this repository in your research, please cite it as:
+
+> Rufas, A. (2024). annarufas/ocean-data-lab: Initial release (v1.0.0) [collection]. Zenodo. 

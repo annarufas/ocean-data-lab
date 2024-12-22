@@ -28,7 +28,7 @@ addpath(genpath(fullfile('figures')))
 fullpathInputDataDir = fullfile('data','processed');
 
 % Chla
-fullpathChlaAquaModisFile = fullfile(fullpathInputDataDir,'chla_aquamodis.mat');
+fullpathChlaAquaModisFile = fullfile(fullpathInputDataDir,'chla_modis.mat');
 fullpathChlaCmemsFile     = fullfile(fullpathInputDataDir,'chla_cmems_bgc.mat');
 fullpathChlaOccciFile     = fullfile(fullpathInputDataDir,'chla_occci.mat');
 
@@ -49,7 +49,7 @@ fullpathTempCmemsFile = fullfile(fullpathInputDataDir,'temp_cmems_phys.mat');
 fullpathTempWoaFile   = fullfile(fullpathInputDataDir,'temp_monthly_woa23.mat');
 
 % PAR0
-fullpathPar0AquaModisFile  = fullfile(fullpathInputDataDir,'par0_aquamodis.mat');
+fullpathPar0AquaModisFile  = fullfile(fullpathInputDataDir,'par0_modis.mat');
 fullpathPar0CalculatedFile = fullfile(fullpathInputDataDir,'par0_monthly_calculated.mat');
 
 % Colour maps

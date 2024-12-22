@@ -37,7 +37,7 @@ addpath(genpath(fullfile('figures')))
 % -------------------------------------------------------------------------
 
 fullpathInputKdAquaModisDir = fullfile('data','raw','kd','AquaMODIS');
-fullpathOutputKdAquaModisFile = fullfile('data','processed','kd_aquamodis.mat');
+fullpathOutputKdAquaModisFile = fullfile('data','processed','kd_modis.mat');
 
 % =========================================================================
 %%
@@ -63,4 +63,4 @@ save(fullpathOutputKdAquaModisFile,'kd','kd_lat','kd_lon','-v7.3')
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputKdAquaModisFile,[],'m^{-1}',...
-    0,0.2,true,'fig_monthly_kd_aquamodis','kd Aqua-MODIS')
+    0,0.2,true,'fig_monthly_kd_modis','kd Aqua-MODIS')

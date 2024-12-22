@@ -42,27 +42,31 @@ isSensorAquaModis = 1;
 
 % Input files
 if isSensorAquaModis
-    fullpathInputChla = fullfile('data','processed','chla_aquamodis.mat');  % mg m-3
-    fullpathInputPar0 = fullfile('data','processed','par0_aquamodis.mat');  % W m-2
+    fullpathInputChla = fullfile('data','processed','chla_modis.mat'); % mg m-3
+    fullpathInputPar0 = fullfile('data','processed','par0_modis.mat'); % W m-2
 else ~isSensorAquaModis
-    fullpathInputChla = fullfile('data','processed','chla_seawifs.mat');  % mg m-3
-    fullpathInputPar0 = fullfile('data','processed','par0_seawifs.mat');  % W m-2
+    fullpathInputChla = fullfile('data','processed','chla_seawifs.mat'); % mg m-3
+    fullpathInputPar0 = fullfile('data','processed','par0_seawifs.mat'); % W m-2
 end
 fullpathInputSst  = fullfile('data','processed','sst_pathfinder_v5.mat'); % ºC
 
 % Output files
 if isSensorAquaModis && isZeuCarr
-    fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_aquamodis_pathfinder_zeuc02.mat');
-    fullpathFigureName = 'fig_monthly_npp_carr2002_aquamodis_zeuc02';
+    fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_modis_pathfinder_zeuc02.mat');
+    fullpathFigureName = 'fig_monthly_npp_carr2002_modis_zeuc02';
+    figureTag = 'NPP Carr 2002 (MODIS)';
 elseif isSensorAquaModis && ~isZeuCarr
-    fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_aquamodis_pathfinder_zeub97.mat');
-    fullpathFigureName = 'fig_monthly_npp_carr2002_aquamodis_zeub97';
+    fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_modis_pathfinder_zeub97.mat');
+    fullpathFigureName = 'fig_monthly_npp_carr2002_modis_zeub97';
+    figureTag = 'NPP Carr 2002 (MODIS)';
 elseif ~isSensorAquaModis && isZeuCarr
     fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_seawifs_pathfinder_zeuc02.mat');
     fullpathFigureName = 'fig_monthly_npp_carr2002_seawifs_zeuc02';
+    figureTag = 'NPP Carr 2002 (SeaWiFS)';
 elseif ~isSensorAquaModis && ~isZeuCarr
     fullpathOutputNppFile = fullfile('data','processed','npp_carr2002_seawifs_pathfinder_zeub97.mat');
     fullpathFigureName = 'fig_monthly_npp_carr2002_seawifs_zeub97';
+    figureTag = 'NPP Carr 2002 (SeaWiFS)';
 end
 
 % Query points for interpolation
@@ -124,4 +128,4 @@ save(fullpathOutputNppFile,'npp_avg','npp_lat','npp_lon','-v7.3')
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputNppFile,[],'mg C m^{-2} d^{-1}',...
-    0,1000,true,fullpathFigureName,'NPP Carr 2002')
+    0,1000,true,fullpathFigureName,figureTag)

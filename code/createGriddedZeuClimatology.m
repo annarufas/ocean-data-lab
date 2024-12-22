@@ -45,7 +45,7 @@ fullpathOutputDir = fullfile('data','processed');
 
 % Input datasets
 fullpathInputKdCmems = fullfile(fullpathOutputDir,'kd_cmems_bgc.mat');
-fullpathInputKdAquaModis = fullfile(fullpathOutputDir,'kd_aquamodis.mat');
+fullpathInputKdAquaModis = fullfile(fullpathOutputDir,'kd_modis.mat');
 fullpathInputMldCmems = fullfile(fullpathOutputDir,'mld_cmems_phys.mat');
 
 % Query points for interpolation (follow the BGC CMEMS grid, the one with the
@@ -86,12 +86,11 @@ qMld = Fmld(qX, qY, qT);
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
-% SECTION 3 - CALCULATE ZEU USING CMEMS KD
+% SECTION 3 - CALCULATE ZEU USING CMEMS KD AND MLD FROM CMEMS
 % -------------------------------------------------------------------------
 
-kpar = calculateKpar(qMld, qKdCmems); 
-zeu = calculateZeu(kpar, isOnePercentPar0);           
-                  
+[zeu,~] = calculateZeuFromKdAndMLD(qKdCmems,qMld,isOnePercentPar0);
+                 
 % Check for spurious data points
 %figure(); histogram(zeu(:), 100);
 
@@ -105,16 +104,15 @@ save(fullfile(fullpathOutputZeuFile),'zeu','zeu','zeu_lat','zeu_lon','-v7.3')
 prepareDataForPlotting(fullpathOutputZeuFile,[],'m',...
     0,200,true,strcat('fig_monthly_zeu_calculated_kdcmems_mldcmems_',filenameTag),'Zeu calculated from CMEMS kd')
 
-clear kpar zeu
+clear zeu
 
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
-% SECTION 4 - CALCULATE ZEU USING AQUA-MODIS KD
+% SECTION 4 - CALCULATE ZEU USING AQUA-MODIS KD AND MLD FROM CMEMS
 % -------------------------------------------------------------------------
 
-kpar = calculateKpar(qMld, qKdAquaModis); 
-zeu = calculateZeu(kpar, isOnePercentPar0);           
+[zeu,~] = calculateZeuFromKdAndMLD(qKdAquaModis,qMld,isOnePercentPar0);        
                   
 % Check for spurious data points
 %figure(); histogram(zeu(:), 100);
@@ -122,49 +120,9 @@ zeu = calculateZeu(kpar, isOnePercentPar0);
 % Save output
 zeu_lat = qLats;
 zeu_lon = qLons;
-fullpathOutputZeuFile = fullfile(fullpathOutputDir,strcat('zeu_calculated_kdaquamodis_mldcmems_',filenameTag,'.mat'));
+fullpathOutputZeuFile = fullfile(fullpathOutputDir,strcat('zeu_calculated_kdmodis_mldcmems_',filenameTag,'.mat'));
 save(fullfile(fullpathOutputZeuFile),'zeu','zeu','zeu_lat','zeu_lon','-v7.3')   
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputZeuFile,[],'m',...
-    0,200,true,strcat('fig_monthly_zeu_calculated_kdaquamodis_mldcmems_',filenameTag),'Zeu calculated from Aqua-MODIS kd')
-
-% =========================================================================
-%%
-% -------------------------------------------------------------------------
-% LOCAL FUNCTIONS USED IN THIS SCRIPT
-% -------------------------------------------------------------------------
-
-function kpar = calculateKpar(mld, kd)
-
-    % Standard formula to calculate kPAR from kd at 490 nm, as defined in the 
-    % publication of Fox et al. (2024) after Morel et al. (2007)
-    % (https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2024GB008149)
-
-    kpar = NaN(size(mld));
-    
-    % Calculate kPAR for MLD <= 1/kd
-    kpar(mld <= (1 ./ kd)) = 0.0864 + 0.884 * kd(mld <= (1 ./ kd)) - (0.00137 ./ kd(mld <= (1 ./ kd)));
-    
-    % Calculate kPAR for MLD > 1/kd
-    kpar(mld > (1 ./ kd)) = 0.0665 + 0.874 * kd(mld > (1 ./ kd)) - (0.00121 ./ kd(mld > (1 ./ kd)));
-    
-end
-
-% *************************************************************************
-
-function zeu = calculateZeu(kpar,isOnePercentPar0)
-
-    % Define zeu based on light penetration (1% or 0.1%), as defined in the 
-    % publication of Fox et al. (2024)
-    % (https://agupubs.onlinelibrary.wiley.com/doi/epdf/10.1029/2024GB008149)
-    
-    if isOnePercentPar0
-        zeu = -log(0.01) ./ kpar;
-    else
-        zeu = -log(0.001) ./ kpar; 
-    end
-    
-end
-
-% *************************************************************************
+    0,200,true,strcat('fig_monthly_zeu_calculated_kdmodis_mldcmems_',filenameTag),'Zeu calculated from Aqua-MODIS kd')
