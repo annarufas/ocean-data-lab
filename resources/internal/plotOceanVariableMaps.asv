@@ -209,7 +209,7 @@ elseif (nSubplots == 12)
 
         haxis(iMonth) = subaxis(4,3,iMonth,'Spacing',0.005,'Padding',0.005,'Margin',0.085);
         ax(iMonth).pos = get(haxis(iMonth),'Position');
-        ax(iMonth).pos(2) = ax(iMonth).pos(2) + 0.005;
+        ax(iMonth).pos(2) =  ax(iMonth).pos(2);
         set(haxis(iMonth),'Position',ax(iMonth).pos) 
  
         mydata = oceanVar(:,:,iMonth);
@@ -219,14 +219,14 @@ elseif (nSubplots == 12)
     end
     
     sgtitle(sgString,'FontSize',14,'FontWeight','bold');
-    
+
     cb = colorbar(haxis(12));
     cb.Location = 'southoutside';
     cb.Position(1) = 0.50-cb.Position(3)/2; 
     cb.Position(2) = ax(12).pos(2) - 0.02;
 
     if contains(cbString,'log10')
-        nTicks = (caxisMax - caxisMin)+1;
+        nTicks = caxisMax,caxisMin) - min(caxisMax,caxisMin);
         ticks = linspace(caxisMin,caxisMax,nTicks);
         % Adjusts the format dynamically, ensuring the number of decimals 
         % is appropriate based on the scale

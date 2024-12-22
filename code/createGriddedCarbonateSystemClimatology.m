@@ -77,9 +77,9 @@ depth = ncread(fullfile(fullpathInputDataDir, [filenameInputCommonTag 'temperatu
 % -------------------------------------------------------------------------
 
 % Initialise output arrays
-co3 = zeros(numel(lon),numel(lat),numel(depth)); % umol kg-1
-omegac = zeros(numel(lon),numel(lat),numel(depth)); % unitless
-omegaa = zeros(numel(lon),numel(lat),numel(depth)); % unitless
+co3 = NaN(numel(lon),numel(lat),numel(depth)); % umol kg-1
+omegac = NaN(numel(lon),numel(lat),numel(depth)); % unitless
+omegaa = NaN(numel(lon),numel(lat),numel(depth)); % unitless
 
 % Parameter choices
 par1type = 1; % The first parameter supplied is of type "1", which is "alkalinity"
@@ -148,6 +148,6 @@ save(fullpathOutputOmegaAragoniteDir,'omegaaragonite','glodap_lat','glodap_lon',
 prepareDataForPlotting(fullpathOutputCarbonateIonDir,5,'umol kg^{-1}',...
     0,250,true,'fig_monthly_co3ion_co2sys','Carbonate ion at 50 m, CO2SYS')
 prepareDataForPlotting(fullpathOutputOmegaCalciteDir,5,'unitless',...
-    0,5,true,'fig_monthly_omegacalcite_co2sys','Omega calcite at 50 m, CO2SYS')
+    0,6,true,'fig_monthly_omegacalcite_co2sys','Omega calcite at 50 m, CO2SYS')
 prepareDataForPlotting(fullpathOutputOmegaAragoniteDir,5,'unitless',...
-    0,5,true,'fig_monthly_omegaaragonite_co2sys','Omega aragonite at 50 m, CO2SYS')
+    0,6,true,'fig_monthly_omegaaragonite_co2sys','Omega aragonite at 50 m, CO2SYS')
