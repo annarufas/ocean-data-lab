@@ -35,6 +35,7 @@ The oceanographic datasets used in this repository are sourced from the followin
 | Copernicus Marine Environmental Monitoring Service ([CMEMS](https://data.marine.copernicus.eu/products)) Data Store | Ocean biogeochemistry, ocean physics and ocean colour data |
 | Earth System Grid Federation ([ESGF](https://aims2.llnl.gov/search/cmip6/?mip_era=CMIP6)) | Climate data from Coupled Model Intercomparison Projects phase 6 (CMIP6) |
 | ESA Biological Pump and Carbon Exchange Processes ([BICEP](https://bicep-project.org/About.html)) project | Ocean colour and ocean  biogeochemistry data |
+| ESA [GlobColour project](https://hermes.acri.fr)    | Ocean colour data                  |
 | ESA Ocean Colour Climate Change Initiative ([OC-CCI](https://www.oceancolour.org)) | Ocean colour data |
 | General Bathymetric Chart of the Ocean ([GEBCO](https://www.gebco.net/data_and_products/gridded_bathymetry_data/#global)) | Bathymetry data |
 | Global Ocean Data Analysis Project ([GLODAP](https://glodap.info)) | Ocean biogeochemistry, physics and carbonate system variables |
@@ -58,10 +59,11 @@ The specific oceanographic datasets accessed and processed by this repository in
     - [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/)
     - [OC-CCI](https://www.oceancolour.org/thredds/ncss/cci/v6.0-release/geographic/monthly/chlor_a/)
     - [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description)
-- Diffuse attenuation coefficient (k<sub>d</sub>)
+- Diffuse attenuation coefficient at 490 nm (k<sub>d</sub>(490))
      - [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/)
+     - [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description) 
 - Euphotic layer depth (z<sub>eu</sub>)
-    - Calculated from k<sub>d</sub> from [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description) and [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/)
+    - Calculated from (1) k<sub>d</sub>(490) from [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description) or [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/), and (2) MLD from CMEMS global BGC reanalysis or [IFREMER](https://cerweb.ifremer.fr/deboyer/data/mld_DReqDTm02_c1m_reg2.0.nc)
 - Mixed layer depth (MLD)
     - [CMEMS global PHYS reanalysis](https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description)
     - [IFREMER](https://cerweb.ifremer.fr/deboyer/data/mld_DReqDTm02_c1m_reg2.0.nc)
@@ -69,11 +71,13 @@ The specific oceanographic datasets accessed and processed by this repository in
     - [Oregon State University's Ocean Productivity Site](http://orca.science.oregonstate.edu/npp_products.php) (VGPM, CbPM, CAFE)
     - [BICEP](https://catalogue.ceda.ac.uk/uuid/69b2c9c6c4714517ba10dab3515e4ee6/)
     - [CMEMS global BGC reanalysis](https://data.marine.copernicus.eu/product/OCEANCOLOUR_GLO_BGC_L4_MY_009_104/description)
+    - Carr ([2002](https://doi.org/10.1016/S0967-0645(01)00094-7)) model
 - Nutrients (nitrate, silicate, phosphate and dissolved oxygen concentration)
     - [World Ocean Atlas 2023](https://www.ncei.noaa.gov/access/world-ocean-atlas-2023/)
 - Photosynthetic active radiation at the surface ocean (PAR<sub>0</sub>)
     - [NASA Aqua-MODIS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/aqua/)
     - [NASA SeaWiFS sensor](https://oceancolor.gsfc.nasa.gov/about/missions/seawifs/)
+    - [GlobColour merged sensors](https://hermes.acri.fr/index.php?class=archive)
     - Calculated using astronomic/trigonometric equations and data inputs of sea ice fraction from [CMEMS global PHYS reanalysis](https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description) and cloud cover fraction from [Pincus et al. (2008)](https://doi.org/10.1029/2007JD009334)
 - Sea surface temperature (SST)
     - NOAA National Centers for Environmental Information (NCEI) [AVHRR Pathfinder SST](https://www.ncei.noaa.gov/products/avhrr-pathfinder-sst)
@@ -87,36 +91,38 @@ The specific oceanographic datasets accessed and processed by this repository in
 
 ## Scripts Overview
 
-The following scripts are available in the `./code/` folder. 
+The following scripts are available in the `./code/` folder. Notice all datasets produced are `latitudes x longitudes (x depth levels) x 12 months`.
 
 | Num| Script name                                    | Script action                                           |
 |----|------------------------------------------------|----------------------------------------------------------
-| 1  | downloadBGCandPHYSfromCMEMS.ipynb              | Downloads data from CMEMS. Must be run before script 5.  |                     
-| 2  | downloadChlaFromOCCCI.m                        | Downloads data from OC-CCI. Must be run before script 7. |  
-| 3  | ncreadAerosolDustDepositionFromCMIP6.m         | Creates `dustflux_cmip6_ncarcesm2.mat` (192 x 288 x 12) |
-| 4  | ncreadBathymetryFromGEBCO.m                    | Creates `bathymetry_gebco.mat` (1080 x 2160)            |
-| 5  | ncreadBGCandPHYSfromCMEMS.m                    | Creates `chla_cmems_bgc.mat`, `kd_cmems_bgc.mat`, `mld_cmems_phys.mat`, `icefrac_cmems_phys.mat` (1080 x 2160 x 12) and `temp_cmems_phys.mat` (1080 x 2160 x 50 x 12) |
-| 6  | ncreadBGCandPHYSfromWOA.m                      | Creates `nit_monthly_woa23.mat`, `phos_monthly_woa23.mat`, `sil_monthly_woa23.mat`, `temp_monthly_woa23.mat`, `oxy_monthly_woa23.mat` (180 x 360 x 102 x 12) and `temp_annual_woa23.mat` (180 x 360 x 102) |
-| 7  | ncreadChlaFromNASAandOCCCI.m                   | Creates `chla_aquamodis.mat` (4320 x 8640 x 12), `chla_seawifs.mat` (2160 x 4320 x 12) and `chla_occci.mat` (4320 x 8640 x 12) | 
-| 8  | ncreadCloudCoverFromPincus.m                   | Creates `cloudcover_pincus.mat` (72 x 144 x 12)         |
-| 9  | ncreadKdFromNASA.m                             | Creates `kd_aquamodis.mat` (4320 x 8640 x 12)           |
-| 10 | ncreadNPPfromBICEP.m                           | Creates `npp_bicep.mat` (2160 x 4320 x 12)              |
-| 11 | ncreadNPPfromOceanProductivitySite.m           | Creates `npp_cafe_seawifs.mat`, `npp_cafe_modis.mat`, `npp_cbpm_modis.mat` and `npp_vgpm_modis.mat` (1080 x 2160 x 12)  |
-| 12 | ncreadMLDfromIFREMER.m                         | Creates `mld_ifremer.mat` (90 x 180 x 12)               |
-| 13 | ncreadPAR0fromNASA.m                           | Creates `par0_aquamodis.mat` (4320 x 8640 x 12) and `par0_seawifs.mat` (2160 x 4320 x 12)  |
-| 14 | ncreadSSTfromPathfinder.m                      | Creates `sst_pathfinder_v5.mat` (4096 x 8192 x 12)      |
-| 15 | ncreadZooplanktonFromCMIP6.m                   | Creates `mesozoo_cmip6_pisces.mat` (64 x 128 x 75), `mesozoo_cmip6_cobalt.mat` (180 x 360 x 35) and `mesozoo_cmip6_medusa.mat` (64 x 128 x 75) |
-| 16 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (1080 x 2160 x 500) and `grid_GEBCO_360_180.mat` (180 x 360 x 500). Must be run after script 4. |
-| 17 | createGriddedCarbonateSystemClimatology.m      | Calculates carbonate system variables using CO2SYS and creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
-| 18 | createGriddedPAR0climatology.m                 | Calculates PAR<sub>0</sub> from cloud and ice cover data and creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365). Must be run after scripts 6, 9 and 16. |
-| 19 | createGriddedZeuClimatology.m                  | Calculates z<sub>eu</sub> from k<sub>d</sub> and MLD and creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdaquamodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12). Must be run after scripts 5 and 9. |
-| 20 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder.mat` (180 x 360 x 12). Must be run after scripts 7, 13 and 14.  |
-| 21 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script 15                                 |
-| 22 | calculatePAR0fromTrigonometricEquations.m      | Called by script 18                                 |
-| 23 | Carr2002algorithm.m                            | Called by script 20                                 |
-| 24 | processSensorDataFromNASA.m                    | Called by scripts 7, 9 and 13                       |
-| 25 | prepareDataForPlotting.m                       | Creates figures to show monthly climatological data (figures with `_monthly_` infix)|
-| 26 | plotCrossSourceComparisonMaps.m                | Creates figures to show comparisons of the same variable across datasets (figures with `_comparison_` infix) |
-| 27 | compareInterpolationMethods.m                  | Applies two different interpolation methods to fill data gaps (especially relevant in polar latitudes) and visualises the output |
-| 28 | submit_zoo_regridding.sh                       | Submits script 21 to the SLURM job scheduler |   
+| 1  | downloadBGCandPHYSfromCMEMS.ipynb              | Downloads BGC and PHYS L4 data from CMEMS. Must be run before script 6  |                     
+| 2  | downloadChlaFromOCCCI.m                        | Downloads merged-sensor, L3 chla data from OC-CCI. Must be run before script 8 |  
+| 3  | downloadOCfromGlobColour.ipynb                 | Downloads merged-sensor, L3 PAR<sub>0</sub> data from GlobColour. Must be run before script 14 | 
+| 4  | ncreadAerosolDustDepositionFromCMIP6.m         | Creates `dustflux_cmip6_ncarcesm2.mat` (192 x 288 x 12) |
+| 5  | ncreadBathymetryFromGEBCO.m                    | Creates `bathymetry_gebco.mat` (1080 x 2160)            |
+| 6  | ncreadBGCandPHYSfromCMEMS.m                    | Creates `chla_cmems_bgc.mat`, `kd_cmems_bgc.mat`, `mld_cmems_phys.mat`, `icefrac_cmems_phys.mat` (1080 x 2160 x 12) and `temp_cmems_phys.mat` (1080 x 2160 x 50 x 12) |
+| 7  | ncreadBGCandPHYSfromWOA.m                      | Creates `nit_monthly_woa23.mat`, `phos_monthly_woa23.mat`, `sil_monthly_woa23.mat`, `temp_monthly_woa23.mat`, `oxy_monthly_woa23.mat` (180 x 360 x 102 x 12) and `temp_annual_woa23.mat` (180 x 360 x 102) |
+| 8  | ncreadChlaFromNASAandOCCCI.m                   | Creates `chla_aquamodis.mat` (4320 x 8640 x 12), `chla_seawifs.mat` (2160 x 4320 x 12) and `chla_occci.mat` (4320 x 8640 x 12) | 
+| 9  | ncreadCloudCoverFromPincus.m                   | Creates `cloudcover_pincus.mat` (72 x 144 x 12)         |
+| 10 | ncreadKdFromNASA.m                             | Creates `kd_aquamodis.mat` (4320 x 8640 x 12)           |
+| 11 | ncreadNPPfromBICEP.m                           | Creates `npp_bicep.mat` (2160 x 4320 x 12)              |
+| 12 | ncreadNPPfromOceanProductivitySite.m           | Creates `npp_cafe_seawifs.mat`, `npp_cafe_modis.mat`, `npp_cbpm_modis.mat` and `npp_vgpm_modis.mat` (1080 x 2160 x 12)  |
+| 13 | ncreadMLDfromIFREMER.m                         | Creates `mld_ifremer.mat` (90 x 180 x 12)               |
+| 14 | ncreadPAR0fromGlobColour.m                     | Creates `par0_globcolour.mat` (180 x 360 x 12)          |
+| 15 | ncreadPAR0fromNASA.m                           | Creates `par0_aquamodis.mat` (4320 x 8640 x 12) and `par0_seawifs.mat` (2160 x 4320 x 12)  |
+| 16 | ncreadSSTfromPathfinder.m                      | Creates `sst_pathfinder_v5.mat` (4096 x 8192 x 12)      |
+| 17 | ncreadZooplanktonFromCMIP6.m                   | Creates `mesozoo_cmip6_pisces.mat` (64 x 128 x 75), `mesozoo_cmip6_cobalt.mat` (180 x 360 x 35) and `mesozoo_cmip6_medusa.mat` (64 x 128 x 75) |
+| 18 | createGridFromBathymetricData.m                | Creates `grid_GEBCO_2160_1080.mat` (1080 x 2160 x 500) and `grid_GEBCO_360_180.mat` (180 x 360 x 500). Must be run after script 5. |
+| 19 | createGriddedCarbonateSystemClimatology.m      | Calculates carbonate system variables using CO2SYS and creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
+| 20 | createGriddedPAR0climatology.m                 | Calculates PAR<sub>0</sub> from cloud and ice cover data and creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365). Must be run after scripts 6, 9 and 18 |
+| 21 | createGriddedZeuClimatology.m                  | Calculates z<sub>eu</sub> from k<sub>d</sub>(490) and MLD and creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdaquamodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12). Must be run after scripts 6 and 10 |
+| 22 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder.mat` (180 x 360 x 12). Must be run after scripts 8, 15 and 16  |
+| 23 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script 17                                 |
+| 24 | calculatePAR0fromTrigonometricEquations.m      | Called by script 20                                 |
+| 25 | Carr2002algorithm.m                            | Called by script 22                                 |
+| 26 | processSensorDataFromNASA.m                    | Called by scripts 8, 10 and 15                      |
+| 27 | prepareDataForPlotting.m                       | Creates figures to show monthly climatological data (figures with `_monthly_` infix)|
+| 28 | plotCrossSourceComparisonMaps.m                | Creates figures to show comparisons of the same variable across datasets (figures with `_comparison_` infix) |
+| 29 | compareInterpolationMethods.m                  | Applies two different interpolation methods to fill data gaps (especially relevant in polar latitudes) and visualises the output |
+| 30 | submit_zoo_regridding.sh                       | Submits script 23 to the SLURM job scheduler |   
 

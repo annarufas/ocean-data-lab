@@ -80,12 +80,14 @@ end
 
 data(data == 0) = NaN; % to improve visualisation
 
-% Check the difference between min and max value before deciding to apply
-% log10 transformation of the data
-orderMin = log10(min(data(:)));
-orderMax = log10(max(data(:)));
-if (max(abs(orderMax),abs(orderMin)) - min(abs(orderMax),abs(orderMin))) > 5 &&...
-        orderMax > 1000 % if the difference in orders of magnitude > 5 and the max value is > 1000
+% Check if the data spans multiple orders of magnitude (log10 values) and 
+% decide whether to apply a log10 transformation. 
+orderMin = log10(caxisMin);
+if caxisMin == 0
+    orderMin = 0;
+end
+orderMax = log10(caxisMax);
+if (max(orderMax,orderMin) - min(orderMax,orderMin)) >= 4 % if the difference in orders of magnitude >= 4
     data = log10(data);
     caxisMin = log10(caxisMin);
     caxisMax = log10(caxisMax);

@@ -16,12 +16,14 @@
 %   - Time resolution: monthly (1850-2014)                                %
 %   - Space resolution: 100 km (288 x 192)                                %
 %   - Version: CMIP6                                                      %
-%   - Units: kg m-2 s-1 (input), g m-2 s-1 (output)                       % 
+%   - Units: kg m-2 s-1 (input), mg m-2 d-1 (output)                      % 
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
 %                                                                         %
 %   Version 1.0 - Completed 29 Oct 2024                                   %
+%   Version 1.1 - 21 Dec 2024: change of output units (from g m-2 s-1 to  %
+%                 mg m-2 d-1)                                             %
 %                                                                         %
 % ======================================================================= %
 
@@ -67,7 +69,7 @@ idxPresent = timeCalendar >= startDatePresent & timeCalendar <= endDatePresent;
 timePresent = timeCalendar(idxPresent);
 depdustPresent = depdust(:,:,idxPresent);
 
-% Avoid negative flux numbers that will corrupt mean calculations
+% Transform negative flux numbers (sink areas) into positive values
 depdustPresent = abs(depdustPresent); 
        
 % Create the climatology array
@@ -87,7 +89,7 @@ Dclim_sort = Dclim(sortIdx,:,:);
 Dclim_sort_perm = permute(Dclim_sort, [2, 1, 3]);
 
 % Units conversion
-dustflux = Dclim_sort_perm.*1e3; % kg m-2 s-1 --> g m-2 s-1
+dustflux = Dclim_sort_perm.*1e6*3600*24; % kg m-2 s-1 --> mg m-2 d-1
 
 % =========================================================================
 %%
@@ -96,7 +98,7 @@ dustflux = Dclim_sort_perm.*1e3; % kg m-2 s-1 --> g m-2 s-1
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-figure(); histogram(dustflux(:),100);
+% figure(); histogram(dustflux(:),100);
 
 % Save the data
 dustflux_lon = lon_sort;
@@ -104,6 +106,6 @@ dustflux_lat = lat;
 save(fullpathOutputDustFile,'dustflux','dustflux_lat','dustflux_lon','-v7.3')
 
 % Visual inspection
-prepareDataForPlotting(fullpathOutputDustFile,[],'g m^{-2} s^{-1}',...
-    1e-10,1e-7,true,'fig_monthly_dust_cmip6','Aerosol dust deposition NCAR-CESM2')
+prepareDataForPlotting(fullpathOutputDustFile,[],'mg dust m^{-2} d^{-1}',...
+    1e-2,100,true,'fig_monthly_dust_cmip6','Aerosol dust deposition NCAR-CESM2')
  

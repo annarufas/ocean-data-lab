@@ -209,9 +209,9 @@ elseif (nSubplots == 12)
 
         haxis(iMonth) = subaxis(4,3,iMonth,'Spacing',0.005,'Padding',0.005,'Margin',0.085);
         ax(iMonth).pos = get(haxis(iMonth),'Position');
-        ax(iMonth).pos(2) =  ax(iMonth).pos(2);
+        ax(iMonth).pos(2) = ax(iMonth).pos(2) + 0.005;
         set(haxis(iMonth),'Position',ax(iMonth).pos) 
-
+ 
         mydata = oceanVar(:,:,iMonth);
         plotPcolorMap(haxis(iMonth),lonVector,latVector,mydata,myColormap,caxisMin,caxisMax);
         title(labelVars(iMonth),'FontSize',12)     
@@ -219,14 +219,28 @@ elseif (nSubplots == 12)
     end
     
     sgtitle(sgString,'FontSize',14,'FontWeight','bold');
-
+    
     cb = colorbar(haxis(12));
     cb.Location = 'southoutside';
     cb.Position(1) = 0.50-cb.Position(3)/2; 
     cb.Position(2) = ax(12).pos(2) - 0.02;
-    cb.Label.String = cbString;
-    cb.FontSize = 10;
 
+    if contains(cbString,'log10')
+        nTicks = (caxisMax - caxisMin)+1;
+        ticks = linspace(caxisMin,caxisMax,nTicks);
+        % Adjusts the format dynamically, ensuring the number of decimals 
+        % is appropriate based on the scale
+        tickLabels = arrayfun(@(x)... 
+            sprintf(['%.' num2str(max(0, -floor(log10(abs(10^x)))) ) 'f'], 10^x), ticks, 'UniformOutput', false);
+        cb.Ticks = ticks; % set the ticks in original scale 
+        cb.TickLabels = tickLabels; % set the custom tick labels
+    end
+    
+    cbStringModified = strrep(cbString, '(log10)', ''); % remove 'log10' from the string
+    cb.Label.String = cbStringModified; % set colorbar label without 'log10'
+    cb.Label.Rotation = 0;
+    cb.FontSize = 10;
+    
     saveFigure(figureName)
 
 end

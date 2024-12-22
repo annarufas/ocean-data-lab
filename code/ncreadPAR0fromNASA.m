@@ -21,7 +21,7 @@
 % instructions: https://forum.earthdata.nasa.gov/viewtopic.php?t=4784.    %
 %                                                                         %
 % This script uses this external function:                                %
-%       processNASAsensorData.m - custom function                         %
+%       processSensorDataFromNASA.m - custom function                     %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %

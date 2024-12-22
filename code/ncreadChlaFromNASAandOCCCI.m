@@ -31,7 +31,7 @@
 %   - Units: mg m-3                                                       %
 %                                                                         %
 % This script uses this external function:                                %
-%       processNASAsensorData - custom function                           %
+%       processSensorDataFromNASA - custom function                       %
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
