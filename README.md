@@ -117,7 +117,7 @@ The following scripts are available in the `./code/` folder. Notice all datasets
 | 19 | createGriddedCarbonateSystemClimatology.m      | Calculates carbonate system variables using CO2SYS and creates `co3ion_co2sys.mat`, `omegacalcite_co2sys.mat` and `omegaaragonite_co2sys.mat` (180 x 360 x 33 x 12) |
 | 20 | createGriddedPAR0climatology.m                 | Calculates PAR<sub>0</sub> from cloud and ice cover data and creates `par0_monthly_calculated.mat` (180 x 360 x 12) and `par0_daily_calculated.mat` (180 x 360 x 365). Must be run after scripts 6, 9 and 18 |
 | 21 | createGriddedZeuClimatology.m                  | Calculates z<sub>eu</sub> from k<sub>d</sub>(490) and MLD and creates `zeu_calculated_kdcmems_mldcmems_pointonepercentpar0.mat`, `zeu_calculated_kdmodis_mldcmems_pointonepercentpar0.mat` (1080 x 2160 x 12). Must be run after scripts 6 and 10 |
-| 22 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder_zeuc02.mat` and `npp_carr2002_modis_pathfinder_zeuc02.mat` (180 x 360 x 12). Must be run after scripts 8, 15 and 16  |
+| 22 | createGriddedNPPclimatologyFromCarrAlgorithm.m | Calculates NPP from chla, PAR<sub>0</sub> and SST and creates `npp_carr2002_seawifs_pathfinder_zeuc02.mat`, `npp_carr2002_seawifs_pathfinder_zeub97.mat`, `npp_carr2002_modis_pathfinder_zeuc02.mat` and `npp_carr2002_modis_pathfinder_zeub97.mat` (180 x 360 x 12). Must be run after scripts 8, 15 and 16  |
 | 23 | regridZooplanktonConcentrationFromCMIP6.m      | Called by script 17                                 |
 | 24 | calculatePAR0fromTrigonometricEquations.m      | Called by script 20                                 |
 | 25 | Carr2002algorithm.m                            | Called by script 22                                 |
@@ -131,4 +131,4 @@ The following scripts are available in the `./code/` folder. Notice all datasets
 
 If you use this repository in your research, please cite it as:
 
-> Rufas, A. (2024). annarufas/ocean-data-lab: Initial release (v1.0.0) [collection]. Zenodo. 
+> Rufas, A. (2024). annarufas/ocean-data-lab: Initial release (v1.0.0) [collection]. Zenodo. https://doi.org/10.5281/zenodo.14544997
