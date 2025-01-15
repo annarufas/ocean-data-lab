@@ -5,6 +5,7 @@ notinuse/
 tests/
 figures/*.pdf
 code/matlab/*.asv
+code/.ipynb_checkpoints/
 resources/internal/*.asv
 .DS_Store
 
