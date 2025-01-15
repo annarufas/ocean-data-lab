@@ -4,8 +4,7 @@ resources/external/*/
 notinuse/
 tests/
 figures/*.pdf
-code/*.asv
+code/matlab/*.asv
 resources/internal/*.asv
-README_cover.png
 .DS_Store
 
