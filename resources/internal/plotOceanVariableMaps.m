@@ -1,4 +1,4 @@
-function plotOceanVariableMaps(oceanVar,lonVector,latVector,myColormap,cbString,...
+function plotOceanVariableMaps(oceanVar,lon,lat,myColourmap,cbString,...
     caxisMin,caxisMax,isCommonColourBar,labelVars,figureName,sgString)
 
 % PLOTOCEANVARIABLEMAPS Visualises oceanographic data across multiple 
@@ -7,9 +7,9 @@ function plotOceanVariableMaps(oceanVar,lonVector,latVector,myColormap,cbString,
 %
 %   INPUT: 
 %       oceanVar          - variable to plot
-%       lonVector         - vector of longitudes
-%       latVector         - vector of latitudes
-%       myColormap        - colour map of choice
+%       lon               - longitudes (vector or array)
+%       lat               - latitudes (vector or array)
+%       myColourmap       - colour map of choice
 %       cbString          - string label for the colour bar
 %       caxisMin          - minimum value for colour axis scaling
 %       caxisMax          - maximum value for colour axis scaling
@@ -47,8 +47,8 @@ if (nSubplots == 4 && isCommonColourBar)
         haxis(iSubplot) = subaxis(2,2,iSubplot,'Spacing',0.01,'Padding',0.02,'Margin',0.03);
         ax(iSubplot).pos = get(haxis(iSubplot),'Position');
 
-        mydata = oceanVar(:,:,iSubplot);
-        plotPcolorMap(haxis(iSubplot),lonVector,latVector,mydata,myColormap,caxisMin,caxisMax);
+        myData = oceanVar(:,:,iSubplot);
+        plotPcolorMap(haxis(iSubplot),lon,lat,myData,myColourmap,caxisMin,caxisMax);
         title(labelVars(iSubplot),'FontSize',13)     
 
     end
@@ -86,8 +86,8 @@ elseif (nSubplots == 4 && ~isCommonColourBar)
         end
         set(haxis(iSubplot), 'Position', ax(iSubplot).pos) 
 
-        mydata = oceanVar(:,:,iSubplot);
-        plotPcolorMap(haxis(iSubplot),lonVector,latVector,mydata,myColormap,caxisMin(iSubplot),caxisMax(iSubplot));
+        myData = oceanVar(:,:,iSubplot);
+        plotPcolorMap(haxis(iSubplot),lon,lat,myData,myColourmap,caxisMin(iSubplot),caxisMax(iSubplot));
         title(labelVars(iSubplot),'FontSize',13)  
         
         cb = colorbar('Location','eastoutside');
@@ -114,8 +114,8 @@ elseif (nSubplots == 3)
         ax(iSubplot).pos(2) = ax(iSubplot).pos(2) + 0.1;
         set(haxis(iSubplot), 'Position', ax(iSubplot).pos) 
 
-        mydata = oceanVar(:,:,iSubplot);
-        plotPcolorMap(haxis(iSubplot),lonVector,latVector,mydata,myColormap,caxisMin,caxisMax);
+        myData = oceanVar(:,:,iSubplot);
+        plotPcolorMap(haxis(iSubplot),lon,lat,myData,myColourmap,caxisMin,caxisMax);
         title(labelVars(iSubplot),'FontSize',13)     
 
     end
@@ -152,8 +152,8 @@ elseif (nSubplots == 5)
         end
         set(haxis(iSubplot), 'Position', ax(iSubplot).pos) 
 
-        mydata = oceanVar(:,:,iSubplot);
-        plotPcolorMap(haxis(iSubplot),lonVector,latVector,mydata,myColormap,caxisMin,caxisMax);
+        myData = oceanVar(:,:,iSubplot);
+        plotPcolorMap(haxis(iSubplot),lon,lat,myData,myColourmap,caxisMin,caxisMax);
         title(labelVars(iSubplot),'FontSize',13)
 
     end
@@ -184,8 +184,8 @@ elseif (nSubplots == 6 && ~isCommonColourBar)
         end
         set(haxis(iSubplot), 'Position', ax(iSubplot).pos) 
 
-        mydata = oceanVar(:,:,iSubplot);
-        plotPcolorMap(haxis(iSubplot),lonVector,latVector,mydata,myColormap,caxisMin(iSubplot),caxisMax(iSubplot));
+        myData = oceanVar(:,:,iSubplot);
+        plotPcolorMap(haxis(iSubplot),lon,lat,myData,myColourmap,caxisMin(iSubplot),caxisMax(iSubplot));
         title(labelVars(iSubplot),'FontSize',13)  
         
         cb = colorbar('Location','eastoutside');
@@ -212,8 +212,8 @@ elseif (nSubplots == 12)
         ax(iMonth).pos(2) = ax(iMonth).pos(2) + 0.005;
         set(haxis(iMonth),'Position',ax(iMonth).pos) 
  
-        mydata = oceanVar(:,:,iMonth);
-        plotPcolorMap(haxis(iMonth),lonVector,latVector,mydata,myColormap,caxisMin,caxisMax);
+        myData = oceanVar(:,:,iMonth);
+        plotPcolorMap(haxis(iMonth),lon,lat,myData,myColourmap,caxisMin,caxisMax);
         title(labelVars(iMonth),'FontSize',12)     
 
     end
