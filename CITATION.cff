@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: >-
+  If you use this repository in your research, please cite
+  it as:
+authors:
+  - given-names: Anna
+    family-names: Rufas
+    orcid: 'https://orcid.org/0000-0003-3800-8879'
+title: >-
+  annarufas/ocean-data-lab: MATLAB Tools to Work with Oceanographic Datasets
+type: collection
+version: 2.0
+doi: 10.5281/zenodo.14544997
+date-released: 2025-01-15
