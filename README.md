@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14544997.svg)](https://doi.org/10.5281/zenodo.14544997)
+
 # MATLAB Tools to Work with Oceanographic Datasets
 
 This repository contains a collection of MATLAB scripts that I have developed for reading, formatting and visualising freely-available oceanographic datasets stored in `.nc` (NetCDF) files. It includes tools to organise data into a four-dimensional structure: `latitudes x longitudes x depth levels x 12 months`, essentially creating a climatology. This structure facilitates further data processing, such as data-model validation or model input preparation. Developed across various projects, I actively maintain and update these scripts to meet evolving research needs.
