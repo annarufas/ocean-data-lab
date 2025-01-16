@@ -14,10 +14,10 @@ This repository contains a collection of MATLAB scripts that I have developed fo
 To use the content of this repository, ensure you have the following.
 - [MATLAB](https://mathworks.com/products/matlab.html) version R2021a or later installed.
 - Third-party functions downloaded from [MATLAB's File Exchange](https://mathworks.com/matlabcentral/fileexchange/): `worstcase`, `m_map`, `brewermap` and `subaxis`. Once downloaded, place these in the `./resources/external/` directory.
+- Jupyter Notebook, included in the latest [Anaconda Python distribution](https://www.anaconda.com/).
 - [CO2SYS algorithm](https://www.ncei.noaa.gov/access/ocean-carbon-acidification-data-system/oceans/CO2SYS/co2rprt.html) for carbonate system calculations. Once downloaded, place it in the `./resources/external/` directory.
 - [SEAWATER toolbox](https://www.cmar.csiro.au/datacentre/ext_docs/seawater.html) to calculate seawater density. Once downloaded, place it in the `./resources/external/` directory.
 - `copernicusmarine` toolbox, essential for downloading oceanographic data from the Copernicus Marine Environmental Monitoring Service (CMEMS). Installation instructions are in this related [repository](https://github.com/annarufas/jupyter-matlab-ocean-satellite-data-toolbox).
-- Jupyter Notebook, included in the latest [Anaconda Python distribution](https://www.anaconda.com/).
 
 ## Repository Structure
 
