@@ -3,6 +3,7 @@ data/raw/*/
 resources/external/*/
 notinuse/
 tests/
+figures/*.png
 figures/*.pdf
 code/matlab/*.asv
 code/.ipynb_checkpoints/

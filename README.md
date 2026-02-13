@@ -31,7 +31,7 @@ To use the content of this repository, ensure you have the following.
 - `./resources/`
     - `./external/`: third-party resources for plotting and functions (*see "Requirements" section*).
     - `./internal/`: custom MATLAB functions generated specifically for plotting (*provided*).
-- `./figures/`: figures generated from processed data (*provided*).
+- `./figures/`: figures generated from processed data (*not ptovided*).
 
 Due to large file sizes and variety of licenses that limit re-distribution of data in various ways, raw data are not hosted in `./data/raw/`. Instead, the links for manually obtaining these data (`.nc` files) are provided in the "Data Sources" section below as well as within the MATLAB scripts in `./code/`. If manual access is difficult, we iclude scripts to download data programmatically. Note that data URLs may change over time, potentially interrupting access. The processed data created by the MATLAB scripts (`.mat`) are in `./data/processed/` but cannot be provided due to their large size.
 
