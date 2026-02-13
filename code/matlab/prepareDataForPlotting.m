@@ -34,8 +34,17 @@ function prepareDataForPlotting(filePath,iDepth,cbString,caxisMin,caxisMax,...
 % PROCESSING STEPS
 % -------------------------------------------------------------------------
 
+% filePath = fullpathOutputExFluxFile;
+% iDepth = [];
+% cbString = 'mg C m-2 d-1';
+% caxisMin = 0;
+% caxisMax = 1000;
+% isCommonColourBar = true;
+% figureName = 'fig_monthly_ef_bicep';
+% sgString = 'Export flux BICEP';
+
 % Colour scale choice
-myColourMap = flipud(brewermap(100,'RdYlBu')); % flip to have blue colours for low values
+myColourMap = flipud(brewermap(1000,'RdYlBu')); % flip to have blue colours for low values
 
 % Label subplots
 labelMonths = {'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'};
@@ -67,19 +76,17 @@ dataVar = varNames{~contains(varNames,{'lat','lon','depth','err'},'IgnoreCase',t
 lat = dataStruct.(latVar);
 lon = dataStruct.(lonVar);
 data = dataStruct.(dataVar);
-
+%%
 % Regrid if the data array is too large and lon/lat come in the form of
 % vectors (for already gridded lon/lat, don't apply this)
 if min(size(lon)) == 1 && numel(lon) > 2160
     [lon, lat, data] = regridData(lon, lat, data, depthVar);
 end
-
+%%
 % Check if the data is 4D and, if so, select a depth slice
 if ndims(data) == 4
     data = squeeze(data(:,:,iDepth,:)); % ith depth slice
 end
-
-% data(data == 0) = NaN; % to improve visualisation
 
 % Check if the data spans multiple orders of magnitude (log10 values) and 
 % decide whether to apply a log10 transformation. 

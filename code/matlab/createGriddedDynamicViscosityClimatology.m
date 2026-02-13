@@ -1,28 +1,28 @@
 
 % ======================================================================= %
 %                                                                         %
-%               Seawater density climatology calculated from              %
-%               salinity and temperature from WOA23 and the               %
-%                Gibbs-SeaWater (GSW) Oceanographic Toolbox               %
+%        Seawater dynamic viscosity climatology calculated from           %
+%            salinity and temperature from WOA23 and the                  %
+%              MIT seawater properties library routines                   %
 %                                                                         %
-% This script creates a global gridded climatology of seawater density    %
-% using salinity and temperature products from World Ocean Atlas 2023     %
-% and the Gibbs-SeaWater (GSW) Oceanographic Toolbox                      %
-% (https://www.teos-10.org). The output array is 180 x 360 x 102 x 12 and % 
-% has units of kg m-3.                                                    %                                        
+% This script creates a global gridded climatology of seawater dynamic    %
+% viscosity using salinity and temperature products from World Ocean      %
+% Atlas 2023 and the MIT seawater properties library routines             %
+% (https://web.mit.edu/seawater/). The output array is                    %
+% 180 x 360 x 102 x 12 and has units of g cm-1 s-1.                       %                                        
 %                                                                         %
 %   WRITTEN BY A. RUFAS, UNIVERISTY OF OXFORD                             %
 %   Anna.RufasBlanco@earth.ox.ac.uk                                       %
 %                                                                         %
-%   Version 1.0 - Completed 8 Jan 2024  - SEAWATER toolbox (outdated)     %
-%   Version 2.0 - Completed 25 Mar 2025 - GSW Oceanographic Toolbox       %
+%   Version 1.0 - Completed 10 Mar 2025                                   %
 %                                                                         %
 % ======================================================================= %
 
 % Clear workspace, close figures, and add paths to plotting resources
 close all; clear all; clc
 addpath(genpath(fullfile('code')))
-addpath(genpath(fullfile('resources','external'))); 
+addpath(genpath(fullfile('resources','external','subaxis'))); 
+addpath(genpath(fullfile('resources','external','subaxis')));
 addpath(genpath(fullfile('resources','internal')));
 addpath(genpath(fullfile('figures')))
 
@@ -33,7 +33,7 @@ addpath(genpath(fullfile('figures')))
 % -------------------------------------------------------------------------
 
 % Output file
-fullpathOutputRho = fullfile('data','processed','rho_calculated_woa23.mat');
+fullpathOutputVisco = fullfile('data','processed','dynamicvisco_calculated_woa23.mat');
 
 % Input files
 fullpathInputTempWoa = fullfile('data','processed','temp_monthly_woa23.mat');
@@ -51,19 +51,8 @@ load(fullpathInputSalWoa,'sal'); % same lat, lon and depths as temp
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
-% SECTION 3 - CALCULATE DENSITY
+% SECTION 3 - CALCULATE DYNAMIC VISCOSITY
 % -------------------------------------------------------------------------
-
-% %% Using the SEAWATER toolbox (outdated)
-% 
-% % Prepare depth array
-% depth3 = repmat(woa_depth_temp,[1 length(woa_lat) length(woa_lon) 12]);
-% depth3 = permute(depth3,[2 3 1 4]);
-% 
-% % Calculate density using the SEAWATER toolbox
-% rho = gsw_rho(sal,temp,depth3); % kg m-3
-
-%% Using the Gibbs-SeaWater (GSW) Oceanographic Toolbox
 
 nLats = numel(woa_lat);  
 nLons = numel(woa_lon);   
@@ -86,21 +75,12 @@ for iMonth = 1:12
     end
 end
 
-% Units conversion of temperature (from in situ to conservative temperature)
-temperatureCons = NaN(size(temp));
+% Calculation of dynamic viscosity 
+dynvisco = NaN(size(temp));
 for iMonth = 1:12
     for iDepth = 1:size(sal,3)
-        temperatureCons(:,:,iDepth,iMonth) = gsw_CT_from_t(squeeze(salinityAbs(:,:,iDepth,iMonth)),...
-            squeeze(temp(:,:,iDepth,iMonth)),squeeze(pressure(:,:,iDepth)));
-    end
-end
-
-% Calculation of density 
-rho = NaN(size(temp));
-for iMonth = 1:12
-    for iDepth = 1:size(sal,3)
-        rho(:,:,iDepth,iMonth) = gsw_rho(squeeze(salinityAbs(:,:,iDepth,iMonth)),...
-            squeeze(temperatureCons(:,:,iDepth,iMonth)),squeeze(pressure(:,:,iDepth))); % kg m-3
+        dynvisco(:,:,iDepth,iMonth) = SW_Viscosity(temp(:,:,iDepth,iMonth),'C',...
+            salinityAbs(:,:,iDepth,iMonth),'ppt'); % kg m-1 s-1
     end
 end
 
@@ -111,17 +91,14 @@ end
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-% figure(); histogram(rho(:), 100);
+% figure(); histogram(dynvisco(:), 100);
 
 % Save output
-rho_lat = woa_lat;
-rho_lon = woa_lon;
-rho_depth = woa_depth_temp;
-save(fullfile(fullpathOutputRho),'rho','rho_lat','rho_lon','rho_depth','-v7.3')   
-%%
+dynvisco_lat = woa_lat;
+dynvisco_lon = woa_lon;
+dynvisco_depth = woa_depth_temp;
+save(fullfile(fullpathOutputVisco),'dynvisco','dynvisco_lat','dynvisco_lon','dynvisco_depth','-v7.3')   
 
-
-%%
 % Visual inspection
-prepareDataForPlotting(fullpathOutputRho,11,'kg m^{-3}',...
-    1020,1030,true,'fig_monthly_rho_calculated_woa23','Density at 50 m, calculated from WOA23')
+prepareDataForPlotting(fullpathOutputVisco,11,'kg m^{-1} s^{-1}',...
+    5e-4,3e-3,true,'fig_monthly_dynvisco_calculated_woa23','Dynamic viscosity at 50 m, calculated from WOA23')

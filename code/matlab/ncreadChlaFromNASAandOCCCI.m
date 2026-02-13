@@ -89,6 +89,8 @@ save(fullpathOutputChlaAquaModisFile,'chla','chla_lat','chla_lon','-v7.3')
 prepareDataForPlotting(fullpathOutputChlaAquaModisFile,[],'mg m^{-3}',...
     0,1,true,'fig_monthly_chla_aquamodis','Chla Aqua-MODIS')
 
+clear chla chla_lat chla_lon
+
 % =========================================================================
 %%
 % -------------------------------------------------------------------------
@@ -114,6 +116,8 @@ save(fullpathOutputChlaSeawifsFile,'chla','chla_lat','chla_lon','-v7.3')
 % Visual inspection
 prepareDataForPlotting(fullpathOutputChlaSeawifsFile,[],'mg m^{-3}',...
     0,1,true,'fig_monthly_chla_seawifs','Chla SeaWiFS')
+
+clear chla chla_lat chla_lon
 
 % =========================================================================
 %%

@@ -1,4 +1,4 @@
-function plotPcolorMap(haxis,lon,lat,myData,myColourmap,caxisMin,caxisMax)
+function plotPcolorMap(haxis,lon,lat,myData,myColourMap,caxisMin,caxisMax)
 
 % PLOTPCOLORMAP Function with my favourite settings to plot pcolor maps.
 %
@@ -7,7 +7,7 @@ function plotPcolorMap(haxis,lon,lat,myData,myColourmap,caxisMin,caxisMax)
 %       lon         - longitudes (can be -180 to 180 or 0 to 360, vector or array)
 %       lat         - latitudes (-90 to 90, vector or array)
 %       myData      - 2D data array (can be lat x lon or lon x lat)
-%       myColourmap - colour map of choice
+%       myColourMap - colour map of choice
 %       caxisMin    - minimum value in the colour bar
 %       caxisMax    - maximum value in the colour bar
 %
@@ -23,16 +23,11 @@ function plotPcolorMap(haxis,lon,lat,myData,myColourmap,caxisMin,caxisMax)
 % PROCESSING STEPS
 % -------------------------------------------------------------------------
 
-% Set projection
-m_proj('Robinson', 'clongitude', -63);
-
 % Swap latitude and longitude so that nRows = nLat and nCols = nLon
 [nRows,nCols] = size(myData);
 if (min(size(lon)) == 1) && (nRows > nCols)
     myData = permute(myData, [2, 1]);
 end
-
-myData(myData == Inf) = 0;
 
 % Transform into gridded form if not already
 if min(size(lon)) == 1 && min(size(lat)) == 1
@@ -41,6 +36,9 @@ else
     X = lon;
     Y = lat;
 end
+
+% Set projection
+m_proj('Robinson', 'clongitude', -63);
 
 % Because of the quirks of flat pcolor, there is a white line in the
 % join -180 to 180 (all the global projections have 360 deg ambiguities)
@@ -53,7 +51,7 @@ end
 % Set axis limits, colour scaling and grid
 caxis([caxisMin caxisMax]);
 shading flat;
-colormap(haxis,myColourmap);
+colormap(haxis,myColourMap);
 m_grid('xtick', [-180:60:180], 'ytick', [-90:30:90], 'xticklabels', [], 'yticklabels', []); % , 'ticklen', 0.1, 'linestyle', 'none'
 m_coast('patch', [.7 .7 .7], 'edgecolor', 'black');
 

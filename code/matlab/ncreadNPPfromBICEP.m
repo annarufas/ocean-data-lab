@@ -47,9 +47,7 @@ fullpathOutputNppFile = fullfile('data','processed',filenameOutputNpp);
 yearsVector = 1998:2020;
 
 for iMonth = 1:12
-
-    for iYear = 1:numel(yearsVector)
-        
+    for iYear = 1:numel(yearsVector)  
         thisYear = yearsVector(iYear);
         yearFolderPath = fullfile(fullpathInputNppDir, num2str(thisYear));
         fileNames = dir(fullfile(yearFolderPath,'*.nc'));

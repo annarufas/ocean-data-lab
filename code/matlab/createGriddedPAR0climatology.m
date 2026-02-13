@@ -157,18 +157,18 @@ end
 % -------------------------------------------------------------------------
 
 % Check for spurious data points
-figure(); histogram(geo_Pclim(:),100);
-figure(); histogram(geo_Pdaily(:),100);
+% figure(); histogram(geo_Pclim(:),100);
+% figure(); histogram(geo_Pdaily(:),100);
 
 % Save output
 par0_lat = x';
 par0_lon = y';
 par0daily = geo_Pdaily;
-par0clim = geo_Pclim;
+par0 = geo_Pclim;
 par0daylighthours = geo_nDaylightHours;
 save(fullfile(fullpathOutputPar0dailyFile),'par0daily','par0_lat','par0_lon') 
 save(fullfile(fullpathOutputNumDaylightHoursFile),'par0daylighthours','par0_lat','par0_lon') 
-save(fullfile(fullpathOutputPar0monthlyFile),'par0clim','par0_lat','par0_lon') 
+save(fullfile(fullpathOutputPar0monthlyFile),'par0','par0_lat','par0_lon') 
 
 % Visual inspection
 prepareDataForPlotting(fullpathOutputPar0monthlyFile,[],'W m^{-2}',...
