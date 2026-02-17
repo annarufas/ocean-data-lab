@@ -96,6 +96,8 @@ The specific oceanographic datasets accessed and processed by this repository in
     - Calculated using astronomic/trigonometric equations and data inputs of sea ice fraction from [CMEMS global PHYS reanalysis](https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description) and cloud cover fraction from [Pincus et al. (2008)](https://doi.org/10.1029/2007JD009334)
 - Particulate organic carbon flux at export depth (a.k.a. export production)
     - [BICEP](https://catalogue.ceda.ac.uk/uuid/a6fc730d88fd4935b59d64903715d891)
+- Phytoplankton carbon (Cphyto)
+    - [BICEP](https://catalogue.ceda.ac.uk/uuid/6a6ccbb8ef2645308a60dc47e9b8b5fb/)
 - Salinity
     - [World Ocean Atlas 2023](https://www.ncei.noaa.gov/access/world-ocean-atlas-2023/)
 - Sea ice concentration
@@ -150,8 +152,9 @@ The following scripts are available in the `./code/` folder. Notice all datasets
 | 29 | calculatePAR0fromTrigonometricEquations.m      | Called by script `createGriddedPAR0climatology.m`                                 |
 | 30 | calculateZeuFromKdAndMLD.m                     | Called by script `createGriddedZeuClimatology.m` |
 | 31 | calculateZeuFromChlaAndMLD.m                   | Called by script `createGriddedZeuClimatology.m` |
-| 32 | Carr2002algorithm.m                            | Called by script `createGriddedNPPclimatologyFromCarrAlgorithm.m`                                 |
-| 33 | processSensorDataFromNASA.m                    | Called by scripts `ncreadChlaFromNASAandOCCCI.m`, `ncreadKdFromNASA.m` and `ncreadPAR0fromNASA.m`                      |
-| 34 | prepareDataForPlotting.m                       | Creates figures to show monthly climatological data (figures with `_monthly_` infix)|
-| 35 | plotCrossSourceComparisonMaps.m                | Creates figures to show comparisons of the same variable across datasets (figures with `_comparison_` infix) |
-| 36 | submit_zoo_regridding.sh                       | Submits script `regridZooplanktonConcentrationFromCMIP6.m` to the SLURM job scheduler |   
+| 32 | calculatePftProbsFromBicepProduct.m            | Processes BICEP phytoplankton carbon (Cphyto) data and calculates PFT relative probabilities      |
+| 33 | Carr2002algorithm.m                            | Called by script `createGriddedNPPclimatologyFromCarrAlgorithm.m`                                 |
+| 34 | processSensorDataFromNASA.m                    | Called by scripts `ncreadChlaFromNASAandOCCCI.m`, `ncreadKdFromNASA.m` and `ncreadPAR0fromNASA.m`                      |
+| 35 | prepareDataForPlotting.m                       | Creates figures to show monthly climatological data (figures with `_monthly_` infix)|
+| 36 | plotCrossSourceComparisonMaps.m                | Creates figures to show comparisons of the same variable across datasets (figures with `_comparison_` infix) |
+| 37 | submit_zoo_regridding.sh                       | Submits script `regridZooplanktonConcentrationFromCMIP6.m` to the SLURM job scheduler |   
