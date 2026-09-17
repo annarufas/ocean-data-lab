@@ -1,2 +1,5 @@
 # Exclude Jupyter notebooks from the repository language statistics
 *.ipynb linguist-detectable=false
+
+# Explicitly classify the core model as Matlab
+*.mat linguist-language=Matlab
