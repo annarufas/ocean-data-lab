@@ -1,0 +1,2 @@
+# Exclude Jupyter notebooks from the repository language statistics
+*.ipynb linguist-detectable=false
